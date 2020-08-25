@@ -75,65 +75,37 @@ router.get('/', (req, res) => {
 
 //to get the cart with details of product and user
 
-router.get('/:cartId',(req,res)=>{
-
-  Cart.findById(req.params.cartId).exec()
-  .then(foundCart=>{
-  //   console.log(foundCart)
-    axios.get('http://localhost:3001/user/'+ foundCart.customerId).then(user=>{
-      var prodlist = {productId:' ' ,productName:' ', quantity:' '}
-    var cart =  {customer:{_id:' ',name:' '} , productList:[prodlist]}
-    cart.customer._id = user.data.result._id
-    cart.customer.name=user.data.result.name
-    //console.log(foundCart.items[0].productId)
-  foundCart.items.forEach(element => {
-
-     prodlist.productId = element.productId,
-     console.log(element.productId)
-     prodlist.quantity = element.quantity
-     console.log(element.quantity)
-       axios.get('http://localhost:3002/products/'+element.productId).then(productFound=>{
-         //console.log(productFound.data.product.productName
-         
-         prodlist.productName = productFound.data.product.productName
-          if(cart.productList.includes(prodlist)){
-            
+router.get('/:cartId', (req, res) => {
+  Cart.findById(req.params.cartId)
+    .exec()
+    .then((foundCart) => {
+      axios
+        .get('http://localhost:3001/user/' + foundCart.customerId)
+        .then(async (user) => {
+          var prodlist = { productId: ' ', productName: ' ', quantity: ' ' };
+          var cart = {
+            customer: { _id: ' ', name: ' ' },
+            productList: [],
+            TotalPrice: 0
+          };
+          cart.customer._id = user.data.result._id;
+          cart.customer.name = user.data.result.name;
+          for (let index = 0; index < foundCart.items.length; index++) {
+            let currentProduct = JSON.parse(JSON.stringify(prodlist));
+            currentProduct.productId = foundCart.items[index].productId;
+            currentProduct.quantity = foundCart.items[index].quantity;
+            await axios
+              .get('http://localhost:3002/products/' + currentProduct.productId)
+              .then((productFound) => {
+                currentProduct.productName = productFound.data.product.productName;
+                cart.productList.push(currentProduct);
+                cart.TotalPrice += productFound.data.product.price 
+              });
           }
-          else{
-          cart.productList.push(...cart.productList,prodlist)
-          }
-         // cart.products[i].quantity= element.quantity
-          console.log(cart)
-        res.json(cart)
-    })
-     
-  })
-  
-  
-  })
-         
-  //   const  prodId = foundCart.items.findIndex(
-  //   (currentItem) => currentItem.productId 
-  //   );
-  //   const  quant = foundCart.items.findIndex(
-  //     (currentItem) => currentItem.quantity
-  //     );
-  //   console.log(cartObject.customer)
-  //    axios.get('http://localhost:3002/products/'+foundCart.items[prodId].productId).then(products=>{
-  //     cartObject.products.product = products.data.product.productName
-  //     cartObject.products.quantity = foundCart.items[quant].quantity
-    
-  //     console.log(cartObject)
-  //     res.json({
-  //       cartObject:cartObject,
-  //       foundCart:foundCart})
-    
-    // })
-   //console.log(user.data)
-  //  })
-  //  res.json(foundCart)
-  })
-})
+          res.json({cart:cart});
+        });
+    });
+});
 
 router.delete('/:cartId', (req, res) => {
   Cart.findOneAndRemove(req.params.cartId)

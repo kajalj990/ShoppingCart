@@ -34,7 +34,7 @@ const upload = multer({
 
 //getting all the products category wise
 router.get('/', (req, res, next) => {
-    Product.find().sort({category:-1}).select('category productName price productImage quantity  description').exec().then(result => {
+    Product.find().sort({category:-1}).exec().then(result => {
         res.status(200).json({
             count: result.length,
             products: result.map(prod => {
@@ -146,6 +146,27 @@ router.patch('/:productId',(req, res, next) => {
         })
     })
 })
+router.post('/update', (req, res) => {
+    let data = req.body.products;
+    console.log(data);
+    function callback() {
+      res.json({
+        'result': 'Successfuly updated Stocks',
+      });
+    }
+    for (let index = 0; index < data.length; index++) {
+      const currentProduct = data[index];
+      Product.findById(currentProduct.id)
+        .exec()
+        .then((databaseObject) => {
+            console.log(databaseObject);
+          databaseObject.quantity -= currentProduct.quantity;
+          databaseObject.save();
+          if (index === data.length - 1) callback();
+        });
+    }
+  });
+  
 
 //deleting the products with id
 router.delete('/:productId', (req, res, next) => {
@@ -171,11 +192,11 @@ router.get('/category/:category', (req, res, next) => {
     Product.find({category: req.params.category })
         .select('productName price _id productImage quantity description')
         .exec()
-        .then(doc => {
-            console.log("from database", doc);
-            if (doc) {
+        .then(product => {
+            console.log("from database", product);
+            if (product) {
                 res.status(200).json({
-                    product: doc,
+                    product: product,
                     request: {
                         type: 'GET',
                         url: 'http://localhost:3002/products/' 
@@ -194,11 +215,11 @@ router.get('/product/:prodName', (req, res, next) => {
     Product.find({ productName : req.params.prodName})
         .select('productName price _id productImage quantity description')
         .exec()
-        .then(doc => {
-            console.log("from database", doc);
-            if (doc) {
+        .then(product => {
+            console.log("from database", product);
+            if (product) {
                 res.status(200).json({
-                    product: doc,
+                    product: product,
                     request: {
                         type: 'GET',
                         url: 'http://localhost:3002/products/' 

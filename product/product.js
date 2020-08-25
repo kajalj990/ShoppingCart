@@ -2,7 +2,7 @@ const http = require('http')
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-
+const cors = require('cors')
 
 mongoose.connect("mongodb+srv://admin:admin123@assignment.lhvje.mongodb.net/Items?retryWrites=true&w=majority",
 { useNewUrlParser: true, useUnifiedTopology: true, });
@@ -17,6 +17,7 @@ const product = express();
 
 const productRoutes = require('./api/routes/productController')
 product.use('/uploads',express.static('uploads'))
+product.use(cors())
 product.use(bodyParser.json())
 product.use('/products',productRoutes)
 
