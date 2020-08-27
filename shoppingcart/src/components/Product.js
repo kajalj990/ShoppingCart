@@ -3,6 +3,7 @@ import axios from 'axios';
 import './products.css';
 import * as actionCreator from '../store/actions';
 import { connect } from 'react-redux';
+import Navbar from './Navbar';
 
 export class Product extends Component {
   constructor(props) {
@@ -51,6 +52,7 @@ export class Product extends Component {
   render() {
     return (
       <div className='bg'>
+        <Navbar />
         <div style={{ padding: '10px' }}>
           {/* {this.productList()} */}
           <img
