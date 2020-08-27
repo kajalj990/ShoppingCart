@@ -12,15 +12,16 @@ export class Product extends Component {
       products: [],
       userId: '',
       quant: '',
+      prodId: this.props.match.params.id
     };
     this.changeHandle.bind(this);
+    this.addToCart.bind(this);
   }
 
-  abc(id, quant) {
-    console.log(quant);
-    // console.log(id,quant)
+  addToCart() {
+    const quant = this.state.quant;
+    const prodId = this.state.prodId;
     const userId = this.props.userId;
-    console.log(userId);
     // axios.post('http://localhost:3004/cart',{id,quant,userId}).then(response=>{
     //   console.log(response.data)
     // })
@@ -77,14 +78,10 @@ export class Product extends Component {
               onChange={event => this.changeHandle(event.target.value)}
             />
             <br />
-            {console.log(this.state.quant)}
             <button
               className='btn-success'
               style={{ borderRadius: '5px' }}
-              onClick={this.abc(
-                this.state.products._id,
-                this.state.products.quant
-              )}
+              onClick={() => this.addToCart()}
             >
               Add to Cart
             </button>
