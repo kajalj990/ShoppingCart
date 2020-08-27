@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-
+const cors  =  require('cors')
 const userRoutes = require('./api/routes/user')
 
 const app = express();
@@ -14,7 +14,7 @@ database.once('open', () => { console.log("Connected") })
 database.on('err', (error) => {
     console.log(error)
 })
-
+app.use(cors())
 app.use(bodyParser.json());
 
 app.get('/',(req,res)=>{

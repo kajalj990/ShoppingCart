@@ -14,7 +14,7 @@ router.post('/',(req,res)=>{
     axios.get('http://localhost:3004/cart/'+req.body.cartId).then((currentCart)=>{
     const prodlist = [];
     console.log(currentCart.data);
-    currentCart.data.productList.forEach((item) => {
+    currentCart.data.cart.productList.forEach((item) => {
       currentProduct = {
         id: item.productId,
         quantity: +item.quantity,

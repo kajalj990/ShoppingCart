@@ -2,39 +2,8 @@ const express = require('express')
 const router = express.Router();
 const mongoose = require('mongoose')
 const Product = require('../model/productModel')
-const multer = require('multer') //used for storing images in db
-const storage = multer.diskStorage({
-    //creates the directory to store images 
-    destination: function (req, fil, cb) {
-        cb(null, './uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + file.originalname)
-    }
-});
-
-//Checks the file type
-const fileFilter = (req, file, cb) => {
-    // reject a file
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
-};
-
-
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 1024 * 1024 * 5
-    },
-    fileFilter: fileFilter
-})
-
-//getting all the products category wise
 router.get('/', (req, res, next) => {
-    Product.find().sort({category:-1}).exec().then(result => {
+    Product.find().sort({category:1}).exec().then(result => {
         res.status(200).json({
             count: result.length,
             products: result.map(prod => {
@@ -42,7 +11,7 @@ router.get('/', (req, res, next) => {
                     _id: prod._id,
                     productName: prod.productName,
                     price: prod.price,
-                    image: prod.productImage,
+                    productImage: prod.productImage,
                     quantity: prod.quantity,
                     category: prod.category,
                     description: prod.description,
@@ -62,7 +31,7 @@ router.get('/', (req, res, next) => {
     })
 })
 //adding products in data base 
-router.post('/',upload.single('productImage'), (req, res, next) => {
+router.post('/', (req, res, next) => {
     Product.find({ productName: req.body.name }).exec()
         .then(product => {
                 const newProduct = new Product({
@@ -212,7 +181,9 @@ router.get('/category/:category', (req, res, next) => {
 
 //finding products by its name
 router.get('/product/:prodName', (req, res, next) => {
-    Product.find({ productName : req.params.prodName})
+    const prodName=req.params.prodName
+    var regex =RegExp(".*"+prodName+".*");
+    Product.find({ productName : regex})
         .select('productName price _id productImage quantity description')
         .exec()
         .then(product => {

@@ -2,6 +2,7 @@ const http = require('http')
 const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const app = express()
 
@@ -15,7 +16,9 @@ database.once('open', () => { console.log("Connected") })
 database.on('err', (error) => {
     console.log(error)
 })
+app.use(cors())
 app.use(bodyParser.json())
+
 app.use('/cart',cartRoute)
 
 const server = http.createServer(app)

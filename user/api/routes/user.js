@@ -84,9 +84,11 @@ router.get('/AllUser',(req, res, next) => {
 
 //to login 
 router.post("/login", (req, res, next) => {
+  console.log(req.body.emailId)
   User.find({ emailId: req.body.emailId })
     .exec()
     .then(user => {
+      console.log(user[0]._id)
       if (user.length < 1) {
         return res.status(401).json({
           message: "One more parameter require"
@@ -109,10 +111,14 @@ router.post("/login", (req, res, next) => {
                 expiresIn: "1h"
             }
           );
-          return res.status(200).json({
+          console.log(token)
+          return res.status(200).json(
+            {
             message: "Auth successful",
+            userId : user[0]._id,
             token: token
           });
+          
         }
         res.status(401).json({
           message: "Auth failed"

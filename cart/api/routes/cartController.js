@@ -7,6 +7,7 @@ const axios = require('axios');
 
 router.post('/', (req, res) => {
   console.log(req.body);
+  console.log("Called me post from cart")
   // const id =  req.body.productId
   const user = req.body.customerId;
   const item = {
