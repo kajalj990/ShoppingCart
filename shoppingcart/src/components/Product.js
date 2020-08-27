@@ -9,7 +9,7 @@ export class Product extends Component {
         super(props)
     
         this.state = {
-             products:[]   ,
+             products:[],
              userId:'',
              quant:''
              }
@@ -20,7 +20,7 @@ export class Product extends Component {
       console.log(quant)
      // console.log(id,quant)
          const userId=this.props.userId
-         console.log(userId)
+         //console.log(userId)
         // axios.post('http://localhost:3004/cart',{id,quant,userId}).then(response=>{
         //   console.log(response.data)
        // })
