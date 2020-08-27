@@ -39,8 +39,8 @@ export class Product extends Component {
         console.log(err);
       });
   }
-  changeHandle(e) {
-    this.setState({ [e.target.name]: e.target.value });
+  changeHandle(quantity) {
+    this.setState({ quant: quantity });
   }
 
   //   productList() {
@@ -74,7 +74,7 @@ export class Product extends Component {
               min='0'
               max='5'
               value={this.state.quant}
-              onChange={this.changeHandle}
+              onChange={event => this.changeHandle(event.target.value)}
             />
             <br />
             {console.log(this.state.quant)}
