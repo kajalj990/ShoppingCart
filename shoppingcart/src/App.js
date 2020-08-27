@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import './App.css';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect } from 'react-router-dom';
 import Route from 'react-router-dom/Route';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
@@ -30,6 +30,15 @@ class App extends Component {
         <Route path="/cart" component={Cart}></Route>
         <Route path="/login" component={Login }></Route>
         <Route path="/signup" component={Register }></Route>
+        <Route
+    exact
+    path="/"
+    render={() => {
+        return (
+            <Redirect to="/home" />
+        )
+    }}
+/>
         </div>
       </Router >
     )

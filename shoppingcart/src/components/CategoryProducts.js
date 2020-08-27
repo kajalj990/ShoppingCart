@@ -17,11 +17,21 @@ export class CategoryProducts extends Component {
           return <DisplayProduct product={currentItem} />;
         });
     }
+
+    componentDidUpdate(prevProps) {
+      if (prevProps.match.params.category !== this.props.match.params.category) {
+        this.fetchDatafromServer();
+      }
+    }
     componentWillMount(){
-         axios.get('http://localhost:3002/products/category/'+this.props.match.params.category).then(response=>{
-         console.log(response.data.product)
-         this.setState({products : response.data.product})
-         })
+      this.fetchDatafromServer();
+    }
+
+    fetchDatafromServer() {
+      axios.get('http://localhost:3002/products/category/'+this.props.match.params.category).then(response=>{
+        console.log(response.data.product)
+        this.setState({products : response.data.product})
+        })
     }
 
     render() {

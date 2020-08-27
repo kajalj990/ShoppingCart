@@ -17,15 +17,15 @@ export class CategorySideNav extends Component {
     
     render() {
         return (
-            <div className="dropdown">
-                <span className="dropbtn">Categories</span>
+            <div className="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" >Categories</a>
                 <div className="dropdown-content">
-                <a href="/category/schoolbag">School Bags</a><br/>
-                <a href="/category/mobile">Mobile</a><br/>
-                <a href="/category/Televisions">Television</a><br/>
-                <a href="/category/colouringbook">Colouring Books</a><br/>
-                <a href="/category/lotion">Body Lotion</a><br/>
-                <a href="/home">All products</a>
+                <Link to="/category/schoolbag">School Bags</Link><br/>
+                <Link to="/category/mobile">Mobile</Link><br/>
+                <Link to="/category/Televisions">Television</Link><br/>
+                <Link to="/category/colouringbook">Colouring Books</Link><br/>
+                <Link to="/category/lotion">Body Lotion</Link><br/>
+                <Link to="/home">All products</Link>
                 </div>
             </div>
         )
