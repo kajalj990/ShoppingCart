@@ -81,6 +81,7 @@ router.post('/', (req, res) => {
 
 //to get the cart with details of product and user
 
+
 router.get('/:userId', (req, res) => {
   Cart.findOne({customerId:req.params.userId})
     .exec()
@@ -93,7 +94,6 @@ router.get('/:userId', (req, res) => {
           var cart = {
             customer: { _id: ' ', name: ' ' },
             productList: [],
-            TotalPrice: 0
           };
           cart.customer._id = user.data.result._id;
           cart.customer.name = user.data.result.name;
@@ -104,14 +104,12 @@ router.get('/:userId', (req, res) => {
             await axios
               .get('http://localhost:3002/products/' + currentProduct.productId)
               .then((productFound) => {
-                currentProduct.productName = productFound.data.product.productName;
+                currentProduct.productName =
+                  productFound.data.product.productName;
                 cart.productList.push(currentProduct);
-                cart.TotalPrice += productFound.data.product.price 
-               
               });
-              res.json({message:"I am from get cart by id",cart:cart});
           }
-          
+          res.json(cart);
         });
     });
 });
