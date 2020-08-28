@@ -116,6 +116,7 @@ router.post("/login", (req, res, next) => {
             {
             message: "Auth successful",
             userId : user[0]._id,
+            userType:user[0].userType,
             token: token
           });
           

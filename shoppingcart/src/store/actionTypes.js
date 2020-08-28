@@ -5,3 +5,4 @@ export const AUTH_REGISTER = 'REGISTER';
 export const GET_USER = 'USER'
 export const GET_CART = 'CART'
 export const CART = 'NEW_CART'
+export const GET_CARTID = 'CARTID'

@@ -6,7 +6,8 @@ import {
   GET_ALL_PRODUCTS,
   GET_USER,
   GET_CART,
-  CART
+  CART,
+  GET_CARTID
 } from './actionTypes';
 import axios from 'axios';
 
@@ -58,7 +59,8 @@ export const performLogin = (data) => {
           type: AUTH_LOGIN,
           payload: {
             token: res.data.token,
-            userId: res.data.userId
+            userId: res.data.userId,
+            userType: res.data.admin
           }
         });
         return res;
@@ -107,7 +109,6 @@ export const performAddToCart = (newCart) => {
   };
 };
 export const getCart = (cartId) => {
-  console.log(cartId)
   return async (dispatch) => {
     return await axios
       .get('http://localhost:3004/cart/'+cartId)
@@ -127,3 +128,14 @@ export const getCart = (cartId) => {
       })
   }
 }
+
+// export const getCartByUser=(userId)=>{
+//   return async (dispatch)=>{
+//     return await axios.get("http://localhost:3004/cart/cart/"+userId).then(res=>{
+//       dispatch({
+//         type:GET_CARTID,
+//         payload:res.data.cart._id
+//       })
+//     })
+//   }
+// }

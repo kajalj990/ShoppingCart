@@ -6,7 +6,8 @@ import {
   GET_ALL_PRODUCTS,
   GET_USER,
   GET_CART,
-  CART
+  CART,
+  GET_CARTID
 
 } from './actionTypes';
 
@@ -16,6 +17,7 @@ const defaultState = {
   errorMessage: '',
   username: '',
   userId: '',
+  userType:'',
   cartId:'',
   cart:[]
 };
@@ -32,6 +34,7 @@ const authReducer = (state = defaultState, action) => {
         isAuthenticated: true,
         token: action.payload.token,
         userId: action.payload.userId,
+        userType:action.payload.userType
       };
     case AUTH_LOGOUT:
       return {
@@ -50,10 +53,15 @@ const authReducer = (state = defaultState, action) => {
       console.log(action.payload)
       return{
         ...state,
-        cart:action.payload
+        cart:action.payload,
       }
+      // case GET_CARTID:
+      // console.log(action.payload)
+      // return{
+      //   ...state,
+      //   cartId:action.payload,
+      // }
     case CART :{
-      console.log(action.payload)
       return{
         ...state,
         cartId:action.payload

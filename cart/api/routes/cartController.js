@@ -64,21 +64,21 @@ router.post('/', (req, res) => {
 });
 
 // //to get all  the cart details of all users
-// router.get('/', (req, res) => {
-//   console.log('all products');
-//   Cart.find()
-//     .exec()
-//     .then((result) => {
-//       res.json({
-//         cart: result,
-//       });
-//     })
-//     .catch((err) => {
-//       res.json({
-//         error: err,
-//       });
-//     });
-// });
+router.get('/cart/:userId', (req, res) => {
+  console.log()
+  Cart.find({customer:req.params.userId})
+    .exec()
+    .then((foundCart) => {
+      res.json({
+        cart: foundCart,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        error: err,
+      });
+    });
+});
 
 //to get the cart with details of product and user
 
@@ -91,7 +91,7 @@ router.get('/:cartId', (req, res) => {
       axios
         .get('http://localhost:3001/user/' + foundCart.customerId)
         .then(async (user) => {
-          var prodlist = { productId: ' ', productName: ' ', quantity: ' ' };
+          var prodlist = { productId: ' ', productName: ' ', price:' ' ,quantity: ' ' };
           var cart = {
             customer: { _id: ' ', name: ' ' },
             productList: [],
@@ -108,9 +108,10 @@ router.get('/:cartId', (req, res) => {
               .then((productFound) => {
                 currentProduct.productName =
                   productFound.data.product.productName;
-
+                  currentProduct.price =productFound.data.product.price 
                 cart.productList.push(currentProduct);
-                cart.TotalPrice+=productFound.data.price
+                
+                cart.TotalPrice+=productFound.data.product.price
               });
           }
           res.json(cart);
