@@ -91,7 +91,7 @@ export const performAddToCart = (newCart) => {
       .then((res) => {
         dispatch({
           type: CART,
-          payload:res.data.cartId
+          payload:res.data.cart._id
         });
         return res
       })

@@ -12,7 +12,7 @@ export class Product extends Component {
     this.state = {
       products: [],
       cart:'',
-      userId: '',
+      userId: this.props.userId,
       quant: '1',
       prodId: this.props.match.params.id
     };
@@ -21,18 +21,15 @@ export class Product extends Component {
   }
 
   async addToCart() {
-    const userId = this.state.userId
-    console.log(quant,prodId,userId)
-    if(userId.length < 1){
+    if(this.state.userId.length < 1){
       alert("not logged in please login first")
       this.props.history.push('/login')
     }else{
       alert("Product added to the cart successfully")
-      console.log(userId)
       const newCart = {
         productId:this.state.prodId,
         quantity:this.state.quant,
-        userId :userId,
+        userId : this.userId,
       }
       await this.props.addtoCart(newCart)
   }
@@ -104,7 +101,6 @@ export class Product extends Component {
   }
 }
 const mapStateToProps = (state) => {
-  console.log(state.userId);
   return {
     userId: state.userId,
     cartId:state.cartId
