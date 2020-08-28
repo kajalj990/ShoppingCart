@@ -117,7 +117,7 @@ export const getCart = (cartId) => {
            type:GET_CART,
            payload: res.data
          })
-         return res;
+         return res.data;
       }).catch((error)=>{
         dispatch({
           type:AUTH_ERROR,
