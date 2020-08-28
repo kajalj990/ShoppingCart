@@ -81,6 +81,7 @@ export const getUser = ()=>{
 }
 }
 export const performAddToCart = (newCart) => {
+    console.log(newCart.productId+"from action")
   return  (dispatch) => {
     return axios
       .post('http://localhost:3004/cart', {

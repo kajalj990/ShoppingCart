@@ -21,18 +21,17 @@ export class Product extends Component {
   }
 
   async addToCart() {
-    const userId = this.state.userId
-    console.log(quant,prodId,userId)
+    const userId = this.props.userId
+    console.log(userId)
     if(userId.length < 1){
       alert("not logged in please login first")
       this.props.history.push('/login')
     }else{
       alert("Product added to the cart successfully")
-      console.log(userId)
       const newCart = {
         productId:this.state.prodId,
         quantity:this.state.quant,
-        userId :userId,
+        userId:userId,
       }
       await this.props.addtoCart(newCart)
   }
@@ -113,7 +112,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
       addtoCart: (newCart) => {
-      console.log('Here');
+      console.log(newCart);
       return dispatch(actionCreator.performAddToCart(newCart));
     },
   };

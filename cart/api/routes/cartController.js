@@ -12,8 +12,8 @@ router.post('/', (req, res) => {
   const user = req.body.userId;
   console.log({user:user})
   const item = {
-    productId: req.body.prodId,
-    quantity: req.body.quant,
+    productId: req.body.productId,
+    quantity: req.body.quantity,
   };
   console.log(item)
   Cart.findOne({ customerId: user })
@@ -50,7 +50,6 @@ router.post('/', (req, res) => {
             .save()
             .then((result) => {
               res.json({
-                cartId:result._id,
                 cart: result,
               });
             })

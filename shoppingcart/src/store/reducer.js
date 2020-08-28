@@ -53,7 +53,7 @@ const authReducer = (state = defaultState, action) => {
       console.log('cart added')
       return{
         ...state,
-        userId:action.payload.cartId
+        cartId:action.payload.cartId
       }
     }
   }
