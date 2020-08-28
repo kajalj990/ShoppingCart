@@ -9,7 +9,8 @@ router.post('/', (req, res) => {
   console.log(req.body);
   console.log("Called me post from cart")
   // const id =  req.body.productId
-  const user = req.body.customerId;
+  const user = req.body.userId;
+  console.log({user:user})
   const item = {
     productId: req.body.productId,
     quantity: req.body.quantity,
@@ -48,41 +49,43 @@ router.post('/', (req, res) => {
             .save()
             .then((result) => {
               res.json({
+                cartId:result._id,
                 cart: result,
               });
             })
             .catch((err) => {
               res.json({ error: err });
             });
-        }
+         }
         
       
     });
 });
 
-//to get all  the cart details of all users
-router.get('/', (req, res) => {
-  console.log('all products');
-  Cart.find()
-    .exec()
-    .then((result) => {
-      res.json({
-        cart: result,
-      });
-    })
-    .catch((err) => {
-      res.json({
-        error: err,
-      });
-    });
-});
+// //to get all  the cart details of all users
+// router.get('/', (req, res) => {
+//   console.log('all products');
+//   Cart.find()
+//     .exec()
+//     .then((result) => {
+//       res.json({
+//         cart: result,
+//       });
+//     })
+//     .catch((err) => {
+//       res.json({
+//         error: err,
+//       });
+//     });
+// });
 
 //to get the cart with details of product and user
 
-router.get('/:cartId', (req, res) => {
-  Cart.findById(req.params.cartId)
+router.get('/:userId', (req, res) => {
+  Cart.findOne({customerId:req.params.userId})
     .exec()
     .then((foundCart) => {
+      console.log(foundCart)
       axios
         .get('http://localhost:3001/user/' + foundCart.customerId)
         .then(async (user) => {
@@ -104,9 +107,11 @@ router.get('/:cartId', (req, res) => {
                 currentProduct.productName = productFound.data.product.productName;
                 cart.productList.push(currentProduct);
                 cart.TotalPrice += productFound.data.product.price 
+               
               });
+              res.json({message:"I am from get cart by id",cart:cart});
           }
-          res.json({cart:cart});
+          
         });
     });
 });

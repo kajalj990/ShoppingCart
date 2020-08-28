@@ -27,7 +27,7 @@ class App extends Component {
         <Route path="/home" component={Home}></Route>
         <Route path="/error" component={ErrorPage}></Route>
         <Route path="/category/:category" component={CategoryProducts}></Route>
-        <Route path="/cart" component={Cart}></Route>
+        <Route path="/Cart" component={Cart}></Route>
         <Route path="/login" component={Login }></Route>
         <Route path="/signup" component={Register }></Route>
         <Route

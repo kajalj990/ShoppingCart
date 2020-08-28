@@ -12,7 +12,7 @@ export class Product extends Component {
     this.state = {
       products: [],
       userId: '',
-      quant: '',
+      quant: '1',
       prodId: this.props.match.params.id
     };
     this.changeHandle.bind(this);
@@ -23,9 +23,17 @@ export class Product extends Component {
     const quant = this.state.quant;
     const prodId = this.state.prodId;
     const userId = this.props.userId;
-    // axios.post('http://localhost:3004/cart',{id,quant,userId}).then(response=>{
-    //   console.log(response.data)
-    // })
+    console.log(quant,prodId,userId)
+    if(userId.length < 1){
+      alert("not logged in please login first")
+      this.props.history.push('/login')
+    }else{
+      alert("Product added to the cart successfully")
+      console.log(userId)
+    axios.post('http://localhost:3004/cart',{prodId,quant,userId}).then(response=>{
+      console.log(response.data)
+   })
+  }
   }
   componentDidMount() {
     console.log(this.props.match.params.id);
@@ -74,7 +82,7 @@ export class Product extends Component {
             <label>Add quantity:</label>
             <input
               type='number'
-              min='0'
+              min='1'
               max='5'
               value={this.state.quant}
               onChange={event => this.changeHandle(event.target.value)}
