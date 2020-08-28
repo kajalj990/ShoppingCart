@@ -16,7 +16,8 @@ const defaultState = {
   errorMessage: '',
   username: '',
   userId: '',
-  cartId:''
+  cartId:'',
+  cart:[]
 };
 
 const authReducer = (state = defaultState, action) => {
@@ -46,14 +47,16 @@ const authReducer = (state = defaultState, action) => {
           userId:action.payload.userId
         }
     case GET_CART:
-      return{
-        cartId:action.payload.cartId
-      }
-    case CART :{
-      console.log('cart added')
+      console.log(action.payload)
       return{
         ...state,
-        cartId:action.payload.cartId
+        cart:action.payload
+      }
+    case CART :{
+      console.log(action.payload)
+      return{
+        ...state,
+        cartId:action.payload
       }
     }
   }

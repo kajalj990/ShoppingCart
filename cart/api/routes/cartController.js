@@ -10,10 +10,10 @@ router.post('/', (req, res) => {
   console.log("Called me post from cart")
   // const id =  req.body.productId
   const user = req.body.userId;
-  console.log({user:user})
+  console.log(user)
   const item = {
     productId: req.body.productId,
-    quantity: req.body.quantity,
+    quantity: parseInt(req.body.quantity),
   };
   console.log(item)
   Cart.findOne({ customerId: user })
@@ -30,12 +30,12 @@ router.post('/', (req, res) => {
           itemToBeUpdated.quantity += item.quantity;
         }
         foundCart.save().then((result) => {
-          res.json({ cartId:foundCart._id,result: result });
+          console.log(result)
+          res.json({cart: result });
         });
 
 
       } else {
-       
           const newCart = new Cart({
             _id: mongoose.Types.ObjectId(),
             items: [
@@ -49,6 +49,7 @@ router.post('/', (req, res) => {
           newCart
             .save()
             .then((result) => {
+              console.log(result);
               res.json({
                 cart: result,
               });
@@ -83,6 +84,7 @@ router.post('/', (req, res) => {
 
 
 router.get('/:cartId', (req, res) => {
+  console.log("from get cart by cartID"+req.params.cartId)
   Cart.findById(req.params.cartId)
     .exec()
     .then((foundCart) => {
@@ -93,6 +95,7 @@ router.get('/:cartId', (req, res) => {
           var cart = {
             customer: { _id: ' ', name: ' ' },
             productList: [],
+            TotalPrice :0
           };
           cart.customer._id = user.data.result._id;
           cart.customer.name = user.data.result.name;
@@ -105,7 +108,9 @@ router.get('/:cartId', (req, res) => {
               .then((productFound) => {
                 currentProduct.productName =
                   productFound.data.product.productName;
+
                 cart.productList.push(currentProduct);
+                cart.TotalPrice+=productFound.data.price
               });
           }
           res.json(cart);
@@ -157,17 +162,17 @@ router.patch('/cart/:cartId/:productId',(req,res)=>{
   })
 })
 
-router.get('/',(req,res)=>{
-  Cart.find({}).exec().then(result=>{
-    res.json({
-      result:result
-    })
-  }).catch(err=>{
-    res.json({
-      error:err
-    })
-  })
-})
+// router.get('/',(req,res)=>{
+//   Cart.find({}).exec().then(result=>{
+//     res.json({
+//       result:result
+//     })
+//   }).catch(err=>{
+//     res.json({
+//       error:err
+//     })
+//   })
+// })
 
 
 module.exports = router;

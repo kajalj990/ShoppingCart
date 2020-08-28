@@ -56,9 +56,10 @@ export const performLogin = (data) => {
       .then((res) => {
         dispatch({
           type: AUTH_LOGIN,
-          payload: {token:res.data.token,
-                    userId :res.data.userId
-                    }
+          payload: {
+            token: res.data.token,
+            userId: res.data.userId
+          }
         });
         return res;
       })
@@ -72,27 +73,27 @@ export const performLogin = (data) => {
   };
 };
 
-export const getUser = ()=>{
+export const getUser = () => {
   return async (dispatch) => {
-  await dispatch({
-    type:GET_USER,
-    payload:"got userID"
-  })
-}
+    await dispatch({
+      type: GET_USER,
+      payload: "got userID"
+    })
+  }
 }
 export const performAddToCart = (newCart) => {
-    console.log(newCart.productId+"from action")
-  return  (dispatch) => {
+  return (dispatch) => {
     return axios
       .post('http://localhost:3004/cart', {
-        productId:newCart.productId,
-        quantity:newCart.quantity,
-        userId:newCart.userId
+        productId: newCart.productId,
+        quantity: newCart.quantity,
+        userId: newCart.userId
       })
       .then((res) => {
+        console.log(res.data.cart._id)
         dispatch({
           type: CART,
-          payload:res.data.cart._id
+          payload: res.data.cart._id
         });
         return res
       })
@@ -105,12 +106,24 @@ export const performAddToCart = (newCart) => {
       });
   };
 };
-export const getCart = ()=>{
+export const getCart = (cartId) => {
+  console.log(cartId)
   return async (dispatch) => {
-  await dispatch({
-    type:GET_CART,
-    payload:"got cartId"
-  })
+    return await axios
+      .get('http://localhost:3004/cart/'+cartId)
+      .then((res)=>{
+          console.log(res.data)
+         dispatch({
+           type:GET_CART,
+           payload: res.data
+         })
+         return res;
+      }).catch((error)=>{
+        dispatch({
+          type:AUTH_ERROR,
+        payload:"no cart found"
+        })
+        return error;
+      })
+  }
 }
-}
-

@@ -4,6 +4,7 @@ import * as actionCreator from '../store/actions'
 import { connect } from 'react-redux'
 import Axios from 'axios'
 
+
 export class Cart extends Component {
     constructor(props) {
         super(props)
@@ -14,13 +15,11 @@ export class Cart extends Component {
              cart:[]
         }
     }
-    componentDidMount(){
+    async componentDidMount(){  
         const cartId = this.props.cartId
-        console.log(this.props.cartId)
+        console.log(cartId) 
         if(cartId.length>1){
-         Axios.get('http://localhost:3004/cart/'+cartId).then(res=>{
-             console.log(res.data.result)
-       })
+         await this.props.cart(cartId)
         }else{
 
             if(this.props.userId <1){
@@ -34,27 +33,40 @@ export class Cart extends Component {
         }
     }
     render() {
-        return (
-            <div>
-                <ul>
-
-                </ul>
+        const cart = this.props.cart ? (
+            <div className="cart">
+              <h4 className="center">Hello{console.log(this.state.cart)}</h4>
+              <p>{this.props.cart.TotalPrice}</p>
+              <div className="center">
+                <button className="btn grey" onClick={this.handleClick}>
+                  Delete Product
+                </button>
+              </div>
             </div>
-        )
-    }
+          ) : (
+            <div className="center">Loading cart...</div>
+          );
+      
+          return (
+            <div className="container">
+              {cart}
+            </div>
+          )
+        }
 }
 
 const mapStateToProps = (state)=>{
     return {
         userId: state.userId,
-        cartId:state.cartId
+        cartId:state.cartId,
+        cart:state.cart
       };
 }
 
 const mapDispatchtoProps =(dispatch)=>{
     return{
-        cid: ()=>{
-            return dispatch(actionCreator.getCart)
+        cart: (cartId)=>{
+            return dispatch(actionCreator.getCart(cartId))
         }
     }
 }

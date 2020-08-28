@@ -29,7 +29,7 @@ export class Product extends Component {
       const newCart = {
         productId:this.state.prodId,
         quantity:this.state.quant,
-        userId : this.userId,
+        userId : this.state.userId,
       }
       await this.props.addtoCart(newCart)
   }
@@ -109,7 +109,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
       addtoCart: (newCart) => {
-      console.log(newCart);
+      console.log('Here');
       return dispatch(actionCreator.performAddToCart(newCart));
     },
   };
