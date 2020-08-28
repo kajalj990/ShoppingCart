@@ -5,49 +5,8 @@ import * as actionCreator from '../store/actions';
 import { connect } from 'react-redux';
 
 export class Product extends Component {
-<<<<<<< HEAD
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-             products:[],
-             userId:'',
-             quant:''
-             }
-             this.changeHandle.bind(this)
-    }
-    
-    abc(id,quant){
-      console.log(quant)
-     // console.log(id,quant)
-         const userId=this.props.userId
-         //console.log(userId)
-        // axios.post('http://localhost:3004/cart',{id,quant,userId}).then(response=>{
-        //   console.log(response.data)
-       // })
-      }
-    componentDidMount() {
-      console.log(this.props.match.params.id)
-      
-        axios
-          .get('http://localhost:3002/products/'+this.props.match.params.id)
-          .then((response) => {
-            console.log(response.data.product);
-            this.setState({products: response.data.product });
-            //
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-          
-      }
-       changeHandle(e){
-        this.setState({ [e.target.name]: e.target.value });
-       }
-=======
   constructor(props) {
     super(props);
->>>>>>> 4960c694c87152c899f2cfd37c64f04e6e534fc5
 
     this.state = {
       products: [],
@@ -63,9 +22,10 @@ export class Product extends Component {
     const quant = this.state.quant;
     const prodId = this.state.prodId;
     const userId = this.props.userId;
-    // axios.post('http://localhost:3004/cart',{id,quant,userId}).then(response=>{
-    //   console.log(response.data)
-    // })
+    const cart={prodId,quant,userId}
+    axios.post('http://localhost:3004/cart',cart).then(response=>{
+      console.log(response.data)
+    })
   }
   componentDidMount() {
     console.log(this.props.match.params.id);

@@ -33,27 +33,30 @@ router.post('/', (req, res) => {
 
 
       } else {
-        const newCart = new Cart({
-          _id: mongoose.Types.ObjectId(),
-          items: [
-            {
-              productId: mongoose.mongo.ObjectID(req.body.productId),
-              quantity: req.body.quantity,
-            },
-          ],
-          customerId: mongoose.mongo.ObjectId(user),
-        });
-        newCart
-          .save()
-          .then((result) => {
-            res.json({
-              cart: result,
-            });
-          })
-          .catch((err) => {
-            res.json({ error: err });
+       
+          const newCart = new Cart({
+            _id: mongoose.Types.ObjectId(),
+            items: [
+              {
+                productId: mongoose.mongo.ObjectID(req.body.productId),
+                quantity: req.body.quantity,
+              },
+            ],
+            customerId: mongoose.mongo.ObjectId(user),
           });
-      }
+          newCart
+            .save()
+            .then((result) => {
+              res.json({
+                cart: result,
+              });
+            })
+            .catch((err) => {
+              res.json({ error: err });
+            });
+        }
+        
+      
     });
 });
 
