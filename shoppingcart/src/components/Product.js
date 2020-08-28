@@ -25,7 +25,6 @@ export class Product extends Component {
       alert("not logged in please login first")
       this.props.history.push('/login')
     }else{
-      alert("Product added to the cart successfully")
       const newCart = {
         productId:this.state.prodId,
         quantity:this.state.quant,

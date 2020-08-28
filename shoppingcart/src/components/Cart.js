@@ -10,18 +10,23 @@ export class Cart extends Component {
 
     this.state = {
       userId: '',
-      cartId: '',
-      cart: '',
+      cartId: ''
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.cart !== this.props.cart) {
+      // TODO Manipulate cart data
+    }
   }
 
   async componentDidMount() {
     const cartId = this.props.cartId;
     if (cartId) {
-      const cart = await this.props.cart(cartId);
+      const cart = await this.props.fetchCart(cartId);
       this.setState({ cart: cart });
     } else {
-      if (this.props.userId) {
+      if (!this.props.userId) {
         alert('Not Logged In Login please');
         this.props.history.push('/login');
       } else {
@@ -54,13 +59,14 @@ export class Cart extends Component {
 const mapStateToProps = (state) => {
   return {
     userId: state.userId,
-    cartId: state.cartId
+    cartId: state.cartId,
+    cart: state.cart
   };
 };
 
 const mapDispatchtoProps = (dispatch) => {
   return {
-    cart: (cartId) => {
+    fetchCart: (cartId) => {
       return dispatch(actionCreator.getCart(cartId));
     },
   };
