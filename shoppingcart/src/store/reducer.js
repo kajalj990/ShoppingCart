@@ -4,7 +4,9 @@ import {
   AUTH_REGISTER,
   AUTH_LOGOUT,
   GET_ALL_PRODUCTS,
-  GET_USER
+  GET_USER,
+  GET_CART,
+  CART
 
 } from './actionTypes';
 
@@ -14,6 +16,7 @@ const defaultState = {
   errorMessage: '',
   username: '',
   userId: '',
+  cartId:''
 };
 
 const authReducer = (state = defaultState, action) => {
@@ -42,6 +45,17 @@ const authReducer = (state = defaultState, action) => {
         return{
           userId:action.payload.userId
         }
+    case GET_CART:
+      return{
+        cartId:action.payload.cartId
+      }
+    case CART :{
+      console.log('cart added')
+      return{
+        ...state,
+        userId:action.payload.cartId
+      }
+    }
   }
   return state;
 };

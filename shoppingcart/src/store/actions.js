@@ -4,7 +4,9 @@ import {
   AUTH_REGISTER,
   AUTH_LOGOUT,
   GET_ALL_PRODUCTS,
-  GET_USER
+  GET_USER,
+  GET_CART,
+  CART
 } from './actionTypes';
 import axios from 'axios';
 
@@ -78,3 +80,36 @@ export const getUser = ()=>{
   })
 }
 }
+export const performAddToCart = (newCart) => {
+  return  (dispatch) => {
+    return axios
+      .post('http://localhost:3004/cart', {
+        productId:newCart.productId,
+        quantity:newCart.quantity,
+        userId:newCart.userId
+      })
+      .then((res) => {
+        dispatch({
+          type: CART,
+          payload:res.data.cartId
+        });
+        return res
+      })
+      .catch((error) => {
+        dispatch({
+          type: AUTH_ERROR,
+          payload: 'Error While registering',
+        });
+        return error;
+      });
+  };
+};
+export const getCart = ()=>{
+  return async (dispatch) => {
+  await dispatch({
+    type:GET_CART,
+    payload:"got cartId"
+  })
+}
+}
+

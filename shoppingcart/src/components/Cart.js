@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import UserNavbar from './UserNavbar'
+import * as actionCreator from '../store/actions'
 import { connect } from 'react-redux'
 import Axios from 'axios'
 
@@ -9,18 +10,27 @@ export class Cart extends Component {
     
         this.state = {
              userId:'',
+             cartId:'',
              cart:[]
         }
     }
     componentDidMount(){
-        const userId = this.props.userId
-        console.log(userId)
-        if(userId.length>1){
-         Axios.get('http://localhost:3004/cart/'+userId).then(res=>{
-             console.log({result:res.data.cart})
+        const cartId = this.props.cartId
+        console.log(this.props.cartId)
+        if(cartId.length>1){
+         Axios.get('http://localhost:3004/cart/'+cartId).then(res=>{
+             console.log(res.data.result)
        })
         }else{
-            this.props.history.push('/login')
+
+            if(this.props.userId <1){
+                alert("Not Logged In Login please")
+                this.props.history.push('/login')
+            }
+            else{
+                alert('Add items in cart')
+                this.props.history.push('/home')
+            }
         }
     }
     render() {
@@ -37,7 +47,16 @@ export class Cart extends Component {
 const mapStateToProps = (state)=>{
     return {
         userId: state.userId,
+        cartId:state.cartId
       };
 }
 
-export default connect(mapStateToProps)(Cart)
+const mapDispatchtoProps =(dispatch)=>{
+    return{
+        cid: ()=>{
+            return dispatch(actionCreator.getCart)
+        }
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchtoProps)(Cart)

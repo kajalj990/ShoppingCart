@@ -12,9 +12,10 @@ router.post('/', (req, res) => {
   const user = req.body.userId;
   console.log({user:user})
   const item = {
-    productId: req.body.productId,
-    quantity: req.body.quantity,
+    productId: req.body.prodId,
+    quantity: req.body.quant,
   };
+  console.log(item)
   Cart.findOne({ customerId: user })
     .exec()
     .then((foundCart) => {
@@ -29,7 +30,7 @@ router.post('/', (req, res) => {
           itemToBeUpdated.quantity += item.quantity;
         }
         foundCart.save().then((result) => {
-          res.json({ result: result });
+          res.json({ cartId:foundCart._id,result: result });
         });
 
 
@@ -82,11 +83,10 @@ router.post('/', (req, res) => {
 //to get the cart with details of product and user
 
 
-router.get('/:userId', (req, res) => {
-  Cart.findOne({customerId:req.params.userId})
+router.get('/:cartId', (req, res) => {
+  Cart.findById(req.params.cartId)
     .exec()
     .then((foundCart) => {
-      console.log(foundCart)
       axios
         .get('http://localhost:3001/user/' + foundCart.customerId)
         .then(async (user) => {

@@ -11,6 +11,7 @@ export class Product extends Component {
 
     this.state = {
       products: [],
+      cart:'',
       userId: '',
       quant: '1',
       prodId: this.props.match.params.id
@@ -19,10 +20,8 @@ export class Product extends Component {
     this.addToCart.bind(this);
   }
 
-  addToCart() {
-    const quant = this.state.quant;
-    const prodId = this.state.prodId;
-    const userId = this.props.userId;
+  async addToCart() {
+    const userId = this.state.userId
     console.log(quant,prodId,userId)
     if(userId.length < 1){
       alert("not logged in please login first")
@@ -30,9 +29,12 @@ export class Product extends Component {
     }else{
       alert("Product added to the cart successfully")
       console.log(userId)
-    axios.post('http://localhost:3004/cart',{prodId,quant,userId}).then(response=>{
-      console.log(response.data)
-   })
+      const newCart = {
+        productId:this.state.prodId,
+        quantity:this.state.quant,
+        userId :userId,
+      }
+      await this.props.addtoCart(newCart)
   }
   }
   componentDidMount() {
@@ -105,13 +107,14 @@ const mapStateToProps = (state) => {
   console.log(state.userId);
   return {
     userId: state.userId,
+    cartId:state.cartId
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    uid: () => {
+      addtoCart: (newCart) => {
       console.log('Here');
-      return dispatch(actionCreator.getUser);
+      return dispatch(actionCreator.performAddToCart(newCart));
     },
   };
 };
