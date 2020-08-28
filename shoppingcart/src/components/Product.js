@@ -21,13 +21,7 @@ export class Product extends Component {
   }
 
   async addToCart() {
-<<<<<<< HEAD
-    const userId = this.props.userId
-    console.log(userId)
-    if(userId.length < 1){
-=======
     if(this.state.userId.length < 1){
->>>>>>> bb9fa3266a6cd609b02252f28c7b73448d8b616a
       alert("not logged in please login first")
       this.props.history.push('/login')
     }else{
@@ -35,11 +29,7 @@ export class Product extends Component {
       const newCart = {
         productId:this.state.prodId,
         quantity:this.state.quant,
-<<<<<<< HEAD
-        userId:userId,
-=======
         userId : this.userId,
->>>>>>> bb9fa3266a6cd609b02252f28c7b73448d8b616a
       }
       await this.props.addtoCart(newCart)
   }
