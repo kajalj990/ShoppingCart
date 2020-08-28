@@ -3,6 +3,7 @@ import axios from 'axios';
 import './products.css';
 import * as actionCreator from '../store/actions';
 import { connect } from 'react-redux';
+import Navbar from './Navbar';
 
 export class Product extends Component {
   constructor(props) {
@@ -22,10 +23,16 @@ export class Product extends Component {
     const quant = this.state.quant;
     const prodId = this.state.prodId;
     const userId = this.props.userId;
+<<<<<<< HEAD
     const cart={prodId,quant,userId}
     axios.post('http://localhost:3004/cart',cart).then(response=>{
       console.log(response.data)
     })
+=======
+    // axios.post('http://localhost:3004/cart',{id,quant,userId}).then(response=>{
+    //   console.log(response.data)
+    // })
+>>>>>>> 2206b0d291377feb22b190958e62ee19e54b8d6e
   }
   componentDidMount() {
     console.log(this.props.match.params.id);
@@ -52,6 +59,10 @@ export class Product extends Component {
   render() {
     return (
       <div className='bg'>
+<<<<<<< HEAD
+=======
+        <Navbar />
+>>>>>>> 2206b0d291377feb22b190958e62ee19e54b8d6e
         <div style={{ padding: '10px' }}>
           {/* {this.productList()} */}
           <img
@@ -108,4 +119,8 @@ const mapDispatchToProps = (dispatch) => {
 };
 //style={{display:"block",marginLeft:"500px",marginTop:"-200px"}}
 //style={{border:"1px solid",}
+<<<<<<< HEAD
 export default connect(mapStateToProps, mapDispatchToProps)(Product);
+=======
+export default connect(mapStateToProps, mapDispatchToProps)(Product);
+>>>>>>> 2206b0d291377feb22b190958e62ee19e54b8d6e
