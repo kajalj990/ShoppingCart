@@ -8,7 +8,8 @@ import {
   GET_CART,
   CART,
   GET_CARTID,
-  REMOVE_PRODUCT
+  REMOVE_PRODUCT,
+  ORDER
 
 } from './actionTypes';
 
@@ -20,7 +21,8 @@ const defaultState = {
   userId: '',
   userType:'',
   cartId:'',
-  cart:[]
+  cart:[],
+  orderId:''
 };
 
 const authReducer = (state = defaultState, action) => {
@@ -59,7 +61,7 @@ const authReducer = (state = defaultState, action) => {
     case REMOVE_PRODUCT:
       return{
         ...state,
-        cart:state.cart
+        cart:action.payload
       }
       // case GET_CARTID:
       // console.log(action.payload)
@@ -71,6 +73,12 @@ const authReducer = (state = defaultState, action) => {
       return{
         ...state,
         cartId:action.payload
+      }
+    }
+    case ORDER :{
+      return{
+        ...state,
+       // orderId:action.payload
       }
     }
   }

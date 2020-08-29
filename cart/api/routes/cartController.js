@@ -19,6 +19,7 @@ router.post('/', (req, res) => {
   Cart.findOne({ customerId: user })
     .exec()
     .then((foundCart) => {
+      console.log(foundCart);
       if (foundCart) {
         const index = foundCart.items.findIndex(
           (currentItem) => currentItem.productId == item.productId
@@ -108,11 +109,12 @@ router.get('/:cartId', (req, res) => {
 });
 
 router.delete('/:cartId', (req, res) => {
-  Cart.findOneAndRemove(req.params.cartId)
+  Cart.remove({_id:req.params.cartId})
     .exec()
-    .then(res.send('the cart is deleted'));
+    .then(foundCart => {
+      res.send("cart deleted")
+    });
 });
-
 //on hold
 // to update the qunatity of product added to cart
 router.patch('/:cartId',(req,res)=>{
@@ -149,10 +151,40 @@ router.patch('/cart/:cartId/:productId',(req,res)=>{
     console.log(index)
         foundCart.items[index].remove()
         console.log('removed')   
-    foundCart.save().then((result) => {
-      res.json({ result: result });
-    });
+    foundCart.save().then(result =>{
+      axios
+      .get('http://localhost:3001/user/' + result.customerId)
+      .then(async (user) => {
+        var prodlist = { productId: ' ', productName: ' ', price:' ' ,quantity: ' ' };
+        var cart = {
+          customer: { _id: ' ', name: ' ' },
+          productList: [],
+          TotalPrice :0
+        };
+        cart.customer._id = user.data.result._id;
+        cart.customer.name = user.data.result.name;
+        for (let index = 0; index < result.items.length; index++) {
+          let currentProduct = JSON.parse(JSON.stringify(prodlist));
+          currentProduct.productId =result.items[index].productId;
+          currentProduct.quantity = result.items[index].quantity;
+          await axios
+            .get('http://localhost:3002/products/' + currentProduct.productId)
+            .then((productFound) => {
+              currentProduct.productName =
+                productFound.data.product.productName;
+                currentProduct.price =productFound.data.product.price 
+              cart.productList.push(currentProduct);
+              
+              cart.TotalPrice+=productFound.data.product.price
+            }).catch(err=>{
+              cart.productList.push(null)
+              res.json("no products in the cart")
+            })
+        }
+        res.json(cart);
+      })
   })
+})
 })
 
 router.get('/',(req,res)=>{

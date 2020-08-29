@@ -8,7 +8,8 @@ import {
   GET_CART,
   CART,
   GET_CARTID,
-  REMOVE_PRODUCT
+  REMOVE_PRODUCT,
+  ORDER
 } from './actionTypes';
 import axios from 'axios';
 
@@ -112,39 +113,61 @@ export const performAddToCart = (newCart) => {
 export const getCart = (cartId) => {
   return async (dispatch) => {
     return await axios
-      .get('http://localhost:3004/cart/'+cartId)
-      .then((res)=>{
-          console.log(res.data)
-         dispatch({
-           type:GET_CART,
-           payload: res.data
-         })
-         return res.data;
-      }).catch((error)=>{
+      .get('http://localhost:3004/cart/' + cartId)
+      .then((res) => {
+        console.log(res.data)
         dispatch({
-          type:AUTH_ERROR,
-        payload:"no cart found"
+          type: GET_CART,
+          payload: res.data
+        })
+        return res.data;
+      }).catch((error) => {
+        dispatch({
+          type: AUTH_ERROR,
+          payload: "no cart found"
         })
         return error;
       })
   }
 }
 
-export const performRemoveProduct=(cartId,productId,userId)=>{
-  return async (dispatch) =>{
-    return await axios.patch('http://localhost:3004/cart/cart/'+cartId+'/'+productId,{productId:productId,userId:userId})
-    .then(res=>{
-      dispatch({
-        type:REMOVE_PRODUCT,
-        payload:"Successfully Removed the product"
+export const performRemoveProduct = (cartId, productId, userId) => {
+  return async (dispatch) => {
+    return await axios.patch('http://localhost:3004/cart/cart/' + cartId + '/' + productId, { productId: productId, userId: userId })
+      .then(res => {
+        console.log(res.data)
+        dispatch({
+          type: REMOVE_PRODUCT,
+          payload: res.data
+        })
+        return res.data
+      }).catch((error) => {
+        dispatch({
+          type: AUTH_ERROR,
+          payload: "Oops cannot remove"
+        })
+        return error;
       })
-      return res
-    }).catch((error)=>{
-      dispatch({
-        type:AUTH_ERROR,
-      payload:"Oops cannot remove"
+  }
+}
+
+export const placeOrder = (cartId) => {
+  return async (dispatch) => {
+    return await axios
+      .post('http://localhost:3005/order/', cartId)
+      .then(res => {
+        console.log(res.data)
+        dispatch({
+          type: ORDER,
+          payload: res.data
+        })
+        return res
+      }).catch((error) => {
+        dispatch({
+          type: AUTH_ERROR,
+          payload: "Oops Cannot Save the order some error"
+        })
+        return error;
       })
-      return error;
-    })
   }
 }

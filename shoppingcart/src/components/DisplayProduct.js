@@ -15,13 +15,13 @@ function DisplayProduct(props) {
         <section style={{fontWeight: 'bold'}}>{props.product.productName}</section>
         <section hidden>{props.product.description}</section>
         <p>Price: <b>{props.product.price}</b></p>
-      </div></Link>
-    <Link to='/cart'> <button
+      </div>
+     <button
         type='button'
         className='btn btn-success'
         key={props.product._id} 
       >
-        Add to Cart
+        View Product Details
       </button></Link>
     </div>
         </div>

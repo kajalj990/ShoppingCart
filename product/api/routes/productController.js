@@ -118,6 +118,7 @@ router.patch('/:productId',(req, res, next) => {
 router.post('/update', (req, res) => {
     let data = req.body.products;
     console.log(data);
+    console.log("-----------------")
     function callback() {
       res.json({
         'result': 'Successfuly updated Stocks',
@@ -125,10 +126,12 @@ router.post('/update', (req, res) => {
     }
     for (let index = 0; index < data.length; index++) {
       const currentProduct = data[index];
-      Product.findById(currentProduct.id)
+      Product.findById(currentProduct._id)
         .exec()
         .then((databaseObject) => {
-            console.log(databaseObject);
+            console.log(+databaseObject);
+            console.log("---------------")
+            console.log(currentProduct)
           databaseObject.quantity -= currentProduct.quantity;
           databaseObject.save();
           if (index === data.length - 1) callback();

@@ -9,18 +9,20 @@ router.post('/',(req,res)=>{
         _id: mongoose.Types.ObjectId(),
         cartId:mongoose.Types.ObjectId(req.body.cartId),
         orderdDate:Date.now()
+
     })
     newOrder.save().then(order=>{
     axios.get('http://localhost:3004/cart/'+req.body.cartId).then((currentCart)=>{
     const prodlist = [];
     console.log(currentCart.data);
-    currentCart.data.cart.productList.forEach((item) => {
+    currentCart.data.productList.forEach((item) => {
+        console.log(item)
       currentProduct = {
-        id: item.productId,
+        _id: item.productId,
         quantity: +item.quantity,
       };
       prodlist.push(currentProduct);
-    });
+    }); 
     axios
       .post('http://localhost:3002/products/update', {products: prodlist})
       .then((result) => {
@@ -29,16 +31,14 @@ router.post('/',(req,res)=>{
             order:order,
           result: 'Sucessfully Create a purchase'
         });   
-        })
-    //     res.status(200).json({
-    //         order:order,
-    //         message:"Your order has been placed "
+        });
          })
      }).catch(err=>{
          res.json({
              error:err
          })
      })
+     
 })
 
 router.get('/:_id',(req,res)=>{
@@ -59,7 +59,7 @@ router.get('/:_id',(req,res)=>{
 })
 
 router.delete('/cancelOrder/:orderId',(req,res)=>{
-    Order.findById(req.params.orderId).exec()
+    Order.findByIdAndDelete(req.params.orderId).exec()
     .then(()=>{
         res.json({
             message : "your order has been successfully deleted"

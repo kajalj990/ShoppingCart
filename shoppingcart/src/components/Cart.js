@@ -3,7 +3,7 @@ import UserNavbar from './UserNavbar';
 import * as actionCreator from '../store/actions';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 export class Cart extends Component {
     constructor(props) {
@@ -12,10 +12,11 @@ export class Cart extends Component {
         this.state = {
             userId: '',
             cartId: '',
+            ishidden:false
         };
     }
 
-    componentDidUpdate(prevProps) {
+     componentDidUpdate(prevProps) {
         if (prevProps.cart !== this.props.cart) {
             // TODO Manipulate cart data
         }
@@ -25,7 +26,7 @@ export class Cart extends Component {
         const cartId = this.props.cartId;
         if (cartId) {
             const cart = await this.props.fetchCart(cartId);
-            this.setState({ cart: cart });
+            this.setState({ cart: cart ,ishidden:true});
         } else {
             if (!this.props.userId) {
                 alert('Not Logged In Login please');
@@ -42,7 +43,15 @@ export class Cart extends Component {
     async deleteProduct(productId){
         console.log(productId)
         await this.props.removeProduct(this.props.cartId,productId,this.props.userId)
-        return(<Redirect to="/Cart"></Redirect>)
+        if(this.props.cart.TotalPrice){
+           return( <div>No Products Available to order</div>)
+        }
+       
+    }
+    async placeOrder(){
+        console.log(this.props.cartId)
+        await this.props.orderProduct(this.props.cartId)
+//this.props.history.push('/Order')
     }
     render() {
         const cart = this.props.cart ? (
@@ -70,9 +79,6 @@ export class Cart extends Component {
                             <td>TotalPrice:</td>
                             <td>{this.props.cart.TotalPrice}Rs</td>
                         </tr>
-                        <tr>
-                            <td><button className="btn btn-success">PlaceOrder</button></td>
-                        </tr>
                     </tbody>
                 </table>
                 </p>
@@ -81,7 +87,14 @@ export class Cart extends Component {
                 <div className='center'>Loading cart...</div>
             );
 
-        return <div className='container'>{cart}</div>;
+        return(
+             <div className='container'>
+            <div>{cart}</div>
+            <div>
+                <button className="btn btn-success" disabled={!this.state.ishidden} onClick={()=>this.placeOrder()}>Order</button>
+           </div>
+           </div>
+        )
     }
 }
 
@@ -100,6 +113,9 @@ const mapDispatchtoProps = (dispatch) => {
         },
         removeProduct:(cartId,productId,userId)=>{
             return dispatch(actionCreator.performRemoveProduct(cartId,productId,userId))
+        },
+        orderProduct:(cartId)=>{
+            return dispatch(actionCreator.placeOrder(cartId))
         }
     };
 };
