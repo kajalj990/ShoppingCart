@@ -59,7 +59,7 @@ const authReducer = (state = defaultState, action) => {
     case REMOVE_PRODUCT:
       return{
         ...state,
-        cart:defaultState.cart    
+        cart:state.cart
       }
       // case GET_CARTID:
       // console.log(action.payload)

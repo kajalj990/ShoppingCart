@@ -70,6 +70,9 @@ export class Cart extends Component {
                             <td>TotalPrice:</td>
                             <td>{this.props.cart.TotalPrice}Rs</td>
                         </tr>
+                        <tr>
+                            <td><button className="btn btn-success">PlaceOrder</button></td>
+                        </tr>
                     </tbody>
                 </table>
                 </p>

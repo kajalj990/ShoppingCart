@@ -63,22 +63,7 @@ router.post('/', (req, res) => {
     });
 });
 
-// //to get all  the cart details of all users
-router.get('cart/:userId', (req, res) => {
-  console.log()
-  Cart.find({customer:req.params.userId})
-    .exec()
-    .then((foundCart) => {
-      res.json({
-        cart: foundCart,
-      });
-    })
-    .catch((err) => {
-      res.json({
-        error: err,
-      });
-    });
-});
+
 
 //to get the cart with details of product and user
 
@@ -112,7 +97,10 @@ router.get('/:cartId', (req, res) => {
                 cart.productList.push(currentProduct);
                 
                 cart.TotalPrice+=productFound.data.product.price
-              });
+              }).catch(err=>{
+                cart.productList.push(null)
+                res.json("no products in the cart")
+              })
           }
           res.json(cart);
         });
@@ -152,7 +140,7 @@ router.patch('/cart/:cartId/:productId',(req,res)=>{
    // quantity: req.body.quantity,
   };
   
-  Cart.findByIdAndDelete({_id:req.params.cartId}).then(foundCart=>{
+  Cart.findById({_id:req.params.cartId}).then(foundCart=>{
     console.log(foundCart)
     const index = foundCart.items.findIndex(
      

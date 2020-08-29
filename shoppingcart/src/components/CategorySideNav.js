@@ -24,7 +24,7 @@ export class CategorySideNav extends Component {
                 <Link to="/category/mobile">Mobile</Link><br/>
                 <Link to="/category/Televisions">Television</Link><br/>
                 <Link to="/category/colouringbook">Colouring Books</Link><br/>
-                <Link to="/category/lotion">Body Lotion</Link><br/>
+                <Link to="/category/bodylotions">Body Lotion</Link><br/>
                 <Link to="/home">All products</Link>
                 </div>
             </div>
