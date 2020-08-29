@@ -29,8 +29,10 @@ export class Product extends Component {
         productId:this.state.prodId,
         quantity:this.state.quant,
         userId : this.state.userId,
+        cartId: this.props.cartId
       }
       await this.props.addtoCart(newCart)
+      this.props.history.push('/home')
   }
   }
   componentDidMount() {
