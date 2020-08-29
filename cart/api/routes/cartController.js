@@ -189,6 +189,32 @@ router.post('/user/:userId', async (req, res) => {
   }
 });
 
+/**
+ * @api /cart/user/:userId
+ * @desc Update cart status
+ */
+router.patch('/user/:cartId', async (req, res) => {
+  try {
+    const cart = await Cart.findOneAndUpdate(
+      {
+        _id: req.params.cartId,
+        status: 'PENDING',
+      },
+      { status: 'CHECKEDOUT' },
+      { new: true }
+    );
+    if (!cart) {
+      return res
+        .status(400)
+        .send({ msg: 'Cart doesnt exist or already checked out' });
+    }
+    res.send(cart);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 router.get('/', (req, res) => {
   Cart.find()
     .exec()
