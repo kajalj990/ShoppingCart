@@ -1,0 +1,25 @@
+.Order {
+    margin:25px;
+    width: 550px;
+    padding: 16px;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    border-radius: 10px;
+    background-color: white;
+  }
+  .centered{
+    position: fixed;
+    top:25%;
+    left:30%;
+  }
+
+  hr {
+    border: 1px solid lightgrey;
+  }
+  
+  span.price {
+    color: grey;
+    text-align: right;
+    padding:100px
+  }
+  
