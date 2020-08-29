@@ -3,7 +3,6 @@ import UserNavbar from './UserNavbar';
 import * as actionCreator from '../store/actions';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import { Redirect } from 'react-router-dom';
 
 export class Cart extends Component {
     constructor(props) {
@@ -15,11 +14,6 @@ export class Cart extends Component {
         };
     }
 
-    componentDidUpdate(prevProps) {
-        if (prevProps.cart !== this.props.cart) {
-            // TODO Manipulate cart data
-        }
-    }
 
     async componentDidMount() {
         const cartId = this.props.cartId;
@@ -42,23 +36,25 @@ export class Cart extends Component {
     async deleteProduct(productId){
         console.log(productId)
         await this.props.removeProduct(this.props.cartId,productId,this.props.userId)
-        return(<Redirect to="/Cart"></Redirect>)
+        await this.props.fetchCart(this.props.cartId)
+        // return(<Redirect to="/Cart"></Redirect>)
     }
     render() {
         const cart = this.props.cart ? (
             <div className='cart'>
-                <h4 className='center'>Hello <span style={{textTransform:"capitalize"}}>{this.props.cart.customer?.name}</span></h4>
-                <p><table className="table table-dark">
+                <h4 className='center' style={{padding: '12px'}}>Hello, <span style={{textTransform:"capitalize"}}>{this.props.cart.customer?.name}</span></h4>
+                <p><table className="table table-striped table-bordered table-hover">
                     <tbody>
                         <tr>
-                            <th>ProductId</th>
+                            {/* <th>ProductId</th> */}
                             <th>ProductName</th>
                             <th>Quantity</th>
                             <th>Price</th>
+                            <th>Operations</th>
                         </tr>
                         {this.props.cart.productList?.map(product => {
                             return (<tr>
-                                <td>{product.productId}</td>
+                                {/* <td>{product.productId}</td> */}
                                 <td>{product.productName}</td>
                                 <td>{product.quantity}</td>
                                 <td>{product.price}Rs</td>
@@ -68,7 +64,8 @@ export class Cart extends Component {
                         })}
                         <tr>
                             <td>TotalPrice:</td>
-                            <td>{this.props.cart.TotalPrice}Rs</td>
+                            <td colSpan='2'>{this.props.cart.TotalPrice}Rs</td>
+                            <td><button className='btn btn-success'>Check Out</button></td>
                         </tr>
                     </tbody>
                 </table>

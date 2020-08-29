@@ -16,13 +16,6 @@ function DisplayProduct(props) {
         <section hidden>{props.product.description}</section>
         <p>Price: <b>{props.product.price}</b></p>
       </div></Link>
-    <Link to='/cart'> <button
-        type='button'
-        className='btn btn-success'
-        key={props.product._id} 
-      >
-        Add to Cart
-      </button></Link>
     </div>
         </div>
     )
