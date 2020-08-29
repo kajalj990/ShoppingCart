@@ -4,18 +4,17 @@ const Cart = require('../model/cartModel');
 const mongoose = require('mongoose');
 const axios = require('axios');
 
-
 router.post('/', (req, res) => {
   console.log(req.body);
-  console.log("Called me post from cart")
+  console.log('Called me post from cart');
   // const id =  req.body.productId
   const user = req.body.userId;
-  console.log(user)
+  console.log(user);
   const item = {
     productId: req.body.productId,
     quantity: parseInt(req.body.quantity),
   };
-  console.log(item)
+  console.log(item);
   Cart.findOne({ customerId: user })
     .exec()
     .then((foundCart) => {
@@ -30,43 +29,39 @@ router.post('/', (req, res) => {
           itemToBeUpdated.quantity += item.quantity;
         }
         foundCart.save().then((result) => {
-          console.log(result)
-          res.json({cart: result });
+          console.log(result);
+          res.json({ cart: result });
         });
-
-
       } else {
-          const newCart = new Cart({
-            _id: mongoose.Types.ObjectId(),
-            items: [
-              {
-                productId: mongoose.mongo.ObjectID(req.body.productId),
-                quantity: req.body.quantity,
-              },
-            ],
-            customerId: mongoose.mongo.ObjectId(user),
-          });
-          newCart
-            .save()
-            .then((result) => {
-              console.log(result);
-              res.json({
-                cart: result,
-              });
-            })
-            .catch((err) => {
-              res.json({ error: err });
+        const newCart = new Cart({
+          _id: mongoose.Types.ObjectId(),
+          items: [
+            {
+              productId: mongoose.mongo.ObjectID(req.body.productId),
+              quantity: req.body.quantity,
+            },
+          ],
+          customerId: mongoose.mongo.ObjectId(user),
+        });
+        newCart
+          .save()
+          .then((result) => {
+            console.log(result);
+            res.json({
+              cart: result,
             });
-         }
-        
-      
+          })
+          .catch((err) => {
+            res.json({ error: err });
+          });
+      }
     });
 });
 
 // //to get all  the cart details of all users
 router.get('cart/:userId', (req, res) => {
-  console.log()
-  Cart.find({customer:req.params.userId})
+  console.log();
+  Cart.find({ customer: req.params.userId })
     .exec()
     .then((foundCart) => {
       res.json({
@@ -82,20 +77,24 @@ router.get('cart/:userId', (req, res) => {
 
 //to get the cart with details of product and user
 
-
 router.get('/:cartId', (req, res) => {
-  console.log("from get cart by cartID"+req.params.cartId)
+  console.log('from get cart by cartID' + req.params.cartId);
   Cart.findById(req.params.cartId)
     .exec()
     .then((foundCart) => {
       axios
         .get('http://localhost:3001/user/' + foundCart.customerId)
         .then(async (user) => {
-          var prodlist = { productId: ' ', productName: ' ', price:' ' ,quantity: ' ' };
+          var prodlist = {
+            productId: ' ',
+            productName: ' ',
+            price: ' ',
+            quantity: ' ',
+          };
           var cart = {
             customer: { _id: ' ', name: ' ' },
             productList: [],
-            TotalPrice :0
+            TotalPrice: 0,
           };
           cart.customer._id = user.data.result._id;
           cart.customer.name = user.data.result.name;
@@ -108,10 +107,10 @@ router.get('/:cartId', (req, res) => {
               .then((productFound) => {
                 currentProduct.productName =
                   productFound.data.product.productName;
-                  currentProduct.price =productFound.data.product.price 
+                currentProduct.price = productFound.data.product.price;
                 cart.productList.push(currentProduct);
-                
-                cart.TotalPrice+=productFound.data.product.price
+
+                cart.TotalPrice += productFound.data.product.price;
               });
           }
           res.json(cart);
@@ -127,57 +126,82 @@ router.delete('/:cartId', (req, res) => {
 
 //on hold
 // to update the qunatity of product added to cart
-router.patch('/:cartId',(req,res)=>{
+router.patch('/:cartId', (req, res) => {
   const item = {
     productId: req.body.productId,
     quantity: req.body.quantity,
   };
-  Cart.findOne(req.params.customerId).then(foundCart=>{
+  Cart.findOne(req.params.customerId).then((foundCart) => {
     const index = foundCart.items.findIndex(
       (currentItem) => currentItem.productId == item.productId
     );
-      itemToBeUpdated = foundCart.items[index];
-      itemToBeUpdated.quantity -= item.quantity;
+    itemToBeUpdated = foundCart.items[index];
+    itemToBeUpdated.quantity -= item.quantity;
     foundCart.save().then((result) => {
       res.json({ result: result });
     });
-  })
-})
-
+  });
+});
 
 //to remove products from the cart
-router.patch('/cart/:cartId/:productId',(req,res)=>{
+router.patch('/cart/:cartId/:productId', (req, res) => {
   const item = {
     productId: req.body.productId,
-   // quantity: req.body.quantity,
+    // quantity: req.body.quantity,
   };
-  
-  Cart.findByIdAndDelete({_id:req.params.cartId}).then(foundCart=>{
-    console.log(foundCart)
+
+  Cart.findByIdAndDelete({ _id: req.params.cartId }).then((foundCart) => {
+    console.log(foundCart);
     const index = foundCart.items.findIndex(
-     
       (currentItem) => currentItem.productId == item.productId
     );
-    console.log(index)
-        foundCart.items[index].remove()
-        console.log('removed')   
+    console.log(index);
+    foundCart.items[index].remove();
+    console.log('removed');
     foundCart.save().then((result) => {
       res.json({ result: result });
     });
-  })
-})
+  });
+});
 
-router.get('/',(req,res)=>{
-  Cart.find().exec().then(result=>{
-    res.json({
-      result:result
-    })
-  }).catch(err=>{
-    res.json({
-      error:err
-    })
-  })
-})
+/**
+ * @api /cart/user/:userId
+ * @desc Fetches a cart with status pending
+ */
+router.post('/user/:userId', async (req, res) => {
+  try {
+    const cart = await Cart.findOne({
+      customerId: req.params.userId,
+      status: 'PENDING',
+    });
+    if (!cart) {
+      const newCart = new Cart({
+        _id: mongoose.Types.ObjectId(),
+        customerId: req.params.userId,
+      });
+      await newCart.save();
+      return res.send(newCart);
+    }
+    res.send(cart);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Server Error');
+  }
+});
 
+router.get('/', (req, res) => {
+  Cart.find()
+    .exec()
+    .then((result) => {
+      res.json({
+        result: result,
+      });
+    })
+    .catch((err) => {
+      res.json({
+        error: err,
+      });
+    });
+});
 
 module.exports = router;
