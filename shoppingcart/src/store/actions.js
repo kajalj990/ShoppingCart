@@ -154,12 +154,12 @@ export const performRemoveProduct = (cartId, productId, userId) => {
 export const placeOrder = (cartId) => {
   return async (dispatch) => {
     return await axios
-      .post('http://localhost:3005/order/', cartId)
+      .post('http://localhost:3005/order/',{cartId : cartId})
       .then(res => {
-        console.log(res.data)
+        console.log(res.data.order)
         dispatch({
           type: ORDER,
-          payload: res.data
+          payload: res.data.order
         })
         return res
       }).catch((error) => {
