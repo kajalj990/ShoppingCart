@@ -4,58 +4,87 @@ const Cart = require('../model/cartModel');
 const mongoose = require('mongoose');
 const axios = require('axios');
 
-router.post('/', (req, res) => {
-  console.log(req.body);
-  console.log('Called me post from cart');
-  // const id =  req.body.productId
-  const user = req.body.userId;
-  console.log(user);
+// router.post('/', (req, res) => {
+//   console.log(req.body);
+//   console.log('Called me post from cart');
+//   // const id =  req.body.productId
+//   const user = req.body.userId;
+//   console.log(user);
+//   const item = {
+//     productId: req.body.productId,
+//     quantity: parseInt(req.body.quantity),
+//   };
+//   console.log(item);
+//   Cart.findOne({ customerId: user })
+//     .exec()
+//     .then((foundCart) => {
+//       if (foundCart) {
+//         const index = foundCart.items.findIndex(
+//           (currentItem) => currentItem.productId == item.productId
+//         );
+//         if (index == -1) {
+//           foundCart.items.push(item);
+//         } else {
+//           itemToBeUpdated = foundCart.items[index];
+//           itemToBeUpdated.quantity += item.quantity;
+//         }
+//         foundCart.save().then((result) => {
+//           console.log(result);
+//           res.json({ cart: result });
+//         });
+//       } else {
+//         const newCart = new Cart({
+//           _id: mongoose.Types.ObjectId(),
+//           items: [
+//             {
+//               productId: mongoose.mongo.ObjectID(req.body.productId),
+//               quantity: req.body.quantity,
+//             },
+//           ],
+//           customerId: mongoose.mongo.ObjectId(user),
+//         });
+//         newCart
+//           .save()
+//           .then((result) => {
+//             console.log(result);
+//             res.json({
+//               cart: result,
+//             });
+//           })
+//           .catch((err) => {
+//             res.json({ error: err });
+//           });
+//       }
+//     });
+// });
+
+
+router.post('/', async (req, res) => {
   const item = {
     productId: req.body.productId,
     quantity: parseInt(req.body.quantity),
   };
-  console.log(item);
-  Cart.findOne({ customerId: user })
-    .exec()
-    .then((foundCart) => {
-      if (foundCart) {
-        const index = foundCart.items.findIndex(
-          (currentItem) => currentItem.productId == item.productId
-        );
-        if (index == -1) {
-          foundCart.items.push(item);
-        } else {
-          itemToBeUpdated = foundCart.items[index];
-          itemToBeUpdated.quantity += item.quantity;
-        }
-        foundCart.save().then((result) => {
-          console.log(result);
-          res.json({ cart: result });
-        });
-      } else {
-        const newCart = new Cart({
-          _id: mongoose.Types.ObjectId(),
-          items: [
-            {
-              productId: mongoose.mongo.ObjectID(req.body.productId),
-              quantity: req.body.quantity,
-            },
-          ],
-          customerId: mongoose.mongo.ObjectId(user),
-        });
-        newCart
-          .save()
-          .then((result) => {
-            console.log(result);
-            res.json({
-              cart: result,
-            });
-          })
-          .catch((err) => {
-            res.json({ error: err });
-          });
-      }
+  try {
+    const foundCart = await Cart.findById(req.body.cartId);
+    if (!foundCart) return res.status(404).json({ msg: 'Cart not found' });
+    if (foundCart.status === 'CHECKEDOUT')
+      return res.status(404).json({ msg: 'Cart already checked out' });
+    const index = foundCart.items
+      .map((currentItem) => currentItem.productId)
+      .indexOf(item.productId);
+    if (index == -1) {
+      foundCart.items.push(item);
+    } else {
+      itemToBeUpdated = foundCart.items[index];
+      itemToBeUpdated.quantity += item.quantity;
+    }
+    foundCart.save().then((result) => {
+      res.json({ cart: result });
     });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json('Server Error');
+  }
 });
 
 // //to get all  the cart details of all users
