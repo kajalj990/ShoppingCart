@@ -39,6 +39,13 @@ export class Cart extends Component {
         await this.props.fetchCart(this.props.cartId)
         // return(<Redirect to="/Cart"></Redirect>)
     }
+
+    handleCheckout = async () => {
+        console.log(this.props.cartId);
+        const purchase = await this.props.performCheckout(this.props.cartId);
+        console.log(purchase);
+        alert('Purchase Successfull')
+    }
     render() {
         const cart = this.props.cart ? (
             <div className='cart'>
@@ -65,7 +72,7 @@ export class Cart extends Component {
                         <tr>
                             <td>TotalPrice:</td>
                             <td colSpan='2'>{this.props.cart.TotalPrice}Rs</td>
-                            <td><button className='btn btn-success'>Check Out</button></td>
+                            <td><button className='btn btn-success' onClick={this.handleCheckout}>Check Out</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -94,6 +101,9 @@ const mapDispatchtoProps = (dispatch) => {
         },
         removeProduct:(cartId,productId,userId)=>{
             return dispatch(actionCreator.performRemoveProduct(cartId,productId,userId))
+        },
+        performCheckout: (cartId) => {
+            return dispatch(actionCreator.performCheckout(cartId))
         }
     };
 };

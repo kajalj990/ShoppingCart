@@ -206,3 +206,21 @@ export const performRemoveProduct = (cartId, productId, userId) => {
       });
   };
 };
+
+export const performCheckout = (cartId) => {
+  return async (dispatch) => {
+    return await axios
+      .post('http://localhost:3005/order', {cartId: cartId})
+      .then(async (res) => {
+        console.log(res);
+        return res;
+      })
+      .catch((error) => {
+        dispatch({
+          type: AUTH_ERROR,
+          payload: 'Error with purchase',
+        });
+        return error;
+      });
+  };
+};
