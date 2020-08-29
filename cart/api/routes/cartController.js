@@ -58,7 +58,6 @@ const axios = require('axios');
 //     });
 // });
 
-
 router.post('/', async (req, res) => {
   const item = {
     productId: req.body.productId,
@@ -173,24 +172,49 @@ router.patch('/:cartId', (req, res) => {
 });
 
 //to remove products from the cart
-router.patch('/cart/:cartId/:productId', (req, res) => {
-  const item = {
-    productId: req.body.productId,
-    // quantity: req.body.quantity,
-  };
+// router.patch('/cart/:cartId/:productId', (req, res) => {
+//   const item = {
+//     productId: req.body.productId,
+//     // quantity: req.body.quantity,
+//   };
 
-  Cart.findByIdAndDelete({ _id: req.params.cartId }).then((foundCart) => {
-    console.log(foundCart);
-    const index = foundCart.items.findIndex(
-      (currentItem) => currentItem.productId == item.productId
-    );
-    console.log(index);
-    foundCart.items[index].remove();
-    console.log('removed');
-    foundCart.save().then((result) => {
-      res.json({ result: result });
-    });
-  });
+//   Cart.findByIdAndDelete({ _id: req.params.cartId }).then((foundCart) => {
+//     console.log(foundCart);
+//     const index = foundCart.items.findIndex(
+//       (currentItem) => currentItem.productId == item.productId
+//     );
+//     console.log(index);
+//     foundCart.items[index].remove();
+//     console.log('removed');
+//     foundCart.save().then((result) => {
+//       res.json({ result: result });
+//     });
+//   });
+// });
+
+router.patch('/cart/:cartId/:productId', async (req, res) => {
+  const productToBeDeleted = req.params.productId;
+  try {
+    const cart = await Cart.findById(req.params.cartId);
+    if (!cart || cart.status === 'CHECKEDOUT')
+      return res
+        .status(400)
+        .send({ msg: 'Cart doesnt exist or already checked out' });
+
+    const index = cart.items
+      .map((currentItem) => currentItem.productId)
+      .indexOf(productToBeDeleted);
+
+    if (index === -1)
+      return res.status(404).send({ msg: 'Cart doesnt have the item' });
+
+    cart.items[index].remove();
+    await cart.save();
+    res.json(cart);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send('Server error on Delete product');
+  }
 });
 
 /**
