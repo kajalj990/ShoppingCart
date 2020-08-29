@@ -2,6 +2,7 @@ const http = require('http')
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const cors  =  require('cors')
 const mongoose = require('mongoose')
 mongoose.connect("mongodb+srv://admin:admin123@assignment.lhvje.mongodb.net/Orders?retryWrites=true&w=majority",
 { useNewUrlParser: true, useUnifiedTopology: true, });
@@ -13,6 +14,7 @@ database.on('err', (error) => {
 })
 const orderRoute = require('./api/routes/orderController')
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use('/order',orderRoute)
 
