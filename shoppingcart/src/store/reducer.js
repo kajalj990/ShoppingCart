@@ -7,7 +7,8 @@ import {
   GET_USER,
   GET_CART,
   CART,
-  GET_CARTID
+  GET_CARTID,
+  REMOVE_PRODUCT
 
 } from './actionTypes';
 
@@ -54,6 +55,11 @@ const authReducer = (state = defaultState, action) => {
       return{
         ...state,
         cart:action.payload,
+      };
+    case REMOVE_PRODUCT:
+      return{
+        ...state,
+        cart:defaultState.cart    
       }
       // case GET_CARTID:
       // console.log(action.payload)

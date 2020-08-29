@@ -7,7 +7,8 @@ import {
   GET_USER,
   GET_CART,
   CART,
-  GET_CARTID
+  GET_CARTID,
+  REMOVE_PRODUCT
 } from './actionTypes';
 import axios from 'axios';
 
@@ -129,13 +130,21 @@ export const getCart = (cartId) => {
   }
 }
 
-// export const getCartByUser=(userId)=>{
-//   return async (dispatch)=>{
-//     return await axios.get("http://localhost:3004/cart/cart/"+userId).then(res=>{
-//       dispatch({
-//         type:GET_CARTID,
-//         payload:res.data.cart._id
-//       })
-//     })
-//   }
-// }
+export const performRemoveProduct=(cartId,productId,userId)=>{
+  return async (dispatch) =>{
+    return await axios.patch('http://localhost:3004/cart/cart/'+cartId+'/'+productId,{productId:productId,userId:userId})
+    .then(res=>{
+      dispatch({
+        type:REMOVE_PRODUCT,
+        payload:"Successfully Removed the product"
+      })
+      return res
+    }).catch((error)=>{
+      dispatch({
+        type:AUTH_ERROR,
+      payload:"Oops cannot remove"
+      })
+      return error;
+    })
+  }
+}

@@ -64,7 +64,7 @@ router.post('/', (req, res) => {
 });
 
 // //to get all  the cart details of all users
-router.get('/cart/:userId', (req, res) => {
+router.get('cart/:userId', (req, res) => {
   console.log()
   Cart.find({customer:req.params.userId})
     .exec()
@@ -163,17 +163,17 @@ router.patch('/cart/:cartId/:productId',(req,res)=>{
   })
 })
 
-// router.get('/',(req,res)=>{
-//   Cart.find({}).exec().then(result=>{
-//     res.json({
-//       result:result
-//     })
-//   }).catch(err=>{
-//     res.json({
-//       error:err
-//     })
-//   })
-// })
+router.get('/cart/:cartId',(req,res)=>{
+  Cart.findById(req.params.cartId).exec().then(result=>{
+    res.json({
+      result:result
+    })
+  }).catch(err=>{
+    res.json({
+      error:err
+    })
+  })
+})
 
 
 module.exports = router;
