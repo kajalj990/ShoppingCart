@@ -151,20 +151,24 @@ router.patch('/cart/:cartId/:productId',(req,res)=>{
     productId: req.body.productId,
    // quantity: req.body.quantity,
   };
-  Cart.findOne(req.params.customerId).then(foundCart=>{
+  
+  Cart.findByIdAndDelete({_id:req.params.cartId}).then(foundCart=>{
+    console.log(foundCart)
     const index = foundCart.items.findIndex(
+     
       (currentItem) => currentItem.productId == item.productId
     );
-      foundCart.items[index].remove()
-      console.log('removed')
+    console.log(index)
+        foundCart.items[index].remove()
+        console.log('removed')   
     foundCart.save().then((result) => {
       res.json({ result: result });
     });
   })
 })
 
-router.get('/cart/:cartId',(req,res)=>{
-  Cart.findById(req.params.cartId).exec().then(result=>{
+router.get('/',(req,res)=>{
+  Cart.find().exec().then(result=>{
     res.json({
       result:result
     })
