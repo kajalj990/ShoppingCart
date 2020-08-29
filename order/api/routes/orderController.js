@@ -17,8 +17,9 @@ router.post('/', (req, res) => {
         .get('http://localhost:3004/cart/' + req.body.cartId)
         .then((currentCart) => {
           const prodlist = [];
-          console.log(currentCart.data);
-          currentCart.data.cart.productList.forEach((item) => {
+          if (currentCart.data.productList.length === 0)
+            return res.json({ msg: 'Cart is empty' });
+          currentCart.data.productList.forEach((item) => {
             currentProduct = {
               id: item.productId,
               quantity: +item.quantity,
@@ -30,15 +31,20 @@ router.post('/', (req, res) => {
               products: prodlist,
             })
             .then((result) => {
-              // Calculate your Totla Payment here
-              res.json({
-                order: order,
-                result: 'Sucessfully Create a purchase',
-              });
-            });
-          //     res.status(200).json({
-          //         order:order,
-          //         message:"Your order has been placed "
+              axios
+                .patch('http://localhost:3004/cart/user/' + req.body.cartId)
+                .then((res) => {
+                  res.json({
+                    result: 'Sucessfully Create a purchase',
+                  });
+                })
+                .catch((error) => res.json(error.message));
+            })
+            .catch((error) => res.json(error.message));
+        })
+        .catch((error) => {
+          console.log(error);
+          res.json(error.message);
         });
     })
     .catch((err) => {
