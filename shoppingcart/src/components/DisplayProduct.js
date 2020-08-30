@@ -15,6 +15,7 @@ function DisplayProduct(props) {
         <section style={{fontWeight: 'bold'}}>{props.product.productName}</section>
         <section hidden>{props.product.description}</section>
         <p>Price: <b>{props.product.price}</b></p>
+<<<<<<< HEAD
       </div>
      <button
         type='button'
@@ -23,6 +24,9 @@ function DisplayProduct(props) {
       >
         View Product Details
       </button></Link>
+=======
+      </div></Link>
+>>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
     </div>
         </div>
     )

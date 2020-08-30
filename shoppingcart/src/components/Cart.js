@@ -3,7 +3,10 @@ import UserNavbar from './UserNavbar';
 import * as actionCreator from '../store/actions';
 import { connect } from 'react-redux';
 import Axios from 'axios';
+<<<<<<< HEAD
 import { Redirect, Link } from 'react-router-dom';
+=======
+>>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
 
 export class Cart extends Component {
     constructor(props) {
@@ -16,11 +19,14 @@ export class Cart extends Component {
         };
     }
 
+<<<<<<< HEAD
      componentDidUpdate(prevProps) {
         if (prevProps.cart !== this.props.cart) {
             // TODO Manipulate cart data
         }
     }
+=======
+>>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
 
     async componentDidMount() {
         const cartId = this.props.cartId;
@@ -43,6 +49,7 @@ export class Cart extends Component {
     async deleteProduct(productId){
         console.log(productId)
         await this.props.removeProduct(this.props.cartId,productId,this.props.userId)
+<<<<<<< HEAD
         if(this.props.cart.TotalPrice){
            return( <div>No Products Available to order</div>)
         }
@@ -52,22 +59,34 @@ export class Cart extends Component {
         console.log(this.props.cartId)
         await this.props.orderProduct(this.props.cartId)
 //this.props.history.push('/Order')
+=======
+        await this.props.fetchCart(this.props.cartId)
+        // return(<Redirect to="/Cart"></Redirect>)
+    }
+
+    handleCheckout = async () => {
+        console.log(this.props.cartId);
+        const purchase = await this.props.performCheckout(this.props.cartId);
+        console.log(purchase);
+        alert('Purchase Successfull')
+>>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
     }
     render() {
         const cart = this.props.cart ? (
             <div className='cart'>
-                <h4 className='center'>Hello <span style={{textTransform:"capitalize"}}>{this.props.cart.customer?.name}</span></h4>
-                <p><table className="table table-dark">
+                <h4 className='center' style={{padding: '12px'}}>Hello, <span style={{textTransform:"capitalize"}}>{this.props.cart.customer?.name}</span></h4>
+                <p><table className="table table-striped table-bordered table-hover">
                     <tbody>
                         <tr>
-                            <th>ProductId</th>
+                            {/* <th>ProductId</th> */}
                             <th>ProductName</th>
                             <th>Quantity</th>
                             <th>Price</th>
+                            <th>Operations</th>
                         </tr>
                         {this.props.cart.productList?.map(product => {
                             return (<tr>
-                                <td>{product.productId}</td>
+                                {/* <td>{product.productId}</td> */}
                                 <td>{product.productName}</td>
                                 <td>{product.quantity}</td>
                                 <td>{product.price}Rs</td>
@@ -77,7 +96,8 @@ export class Cart extends Component {
                         })}
                         <tr>
                             <td>TotalPrice:</td>
-                            <td>{this.props.cart.TotalPrice}Rs</td>
+                            <td colSpan='2'>{this.props.cart.TotalPrice}Rs</td>
+                            <td><button className='btn btn-success' onClick={this.handleCheckout}>Check Out</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -114,8 +134,13 @@ const mapDispatchtoProps = (dispatch) => {
         removeProduct:(cartId,productId,userId)=>{
             return dispatch(actionCreator.performRemoveProduct(cartId,productId,userId))
         },
+<<<<<<< HEAD
         orderProduct:(cartId)=>{
             return dispatch(actionCreator.placeOrder(cartId))
+=======
+        performCheckout: (cartId) => {
+            return dispatch(actionCreator.performCheckout(cartId))
+>>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
         }
     };
 };

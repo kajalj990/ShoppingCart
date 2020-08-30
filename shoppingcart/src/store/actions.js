@@ -9,7 +9,10 @@ import {
   CART,
   GET_CARTID,
   REMOVE_PRODUCT,
+<<<<<<< HEAD
   ORDER
+=======
+>>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
 } from './actionTypes';
 import axios from 'axios';
 
@@ -56,15 +59,24 @@ export const performLogin = (data) => {
   return async (dispatch) => {
     return await axios
       .post('http://localhost:3001/user/login', data)
-      .then((res) => {
+      .then(async (res) => {
         dispatch({
           type: AUTH_LOGIN,
           payload: {
             token: res.data.token,
             userId: res.data.userId,
-            userType: res.data.admin
-          }
+            userType: res.data.admin,
+          },
         });
+        await axios
+          .post('http://localhost:3004/cart/user/' + res.data.userId)
+          .then((cartResponse) => {
+            console.log(cartResponse.data);
+            dispatch({
+              type: CART,
+              payload: cartResponse.data._id,
+            });
+          });
         return res;
       })
       .catch((error) => {
@@ -81,17 +93,18 @@ export const getUser = () => {
   return async (dispatch) => {
     await dispatch({
       type: GET_USER,
-      payload: "got userID"
-    })
-  }
-}
+      payload: "got userID",
+    });
+  };
+};
 export const performAddToCart = (newCart) => {
   return (dispatch) => {
     return axios
       .post('http://localhost:3004/cart', {
         productId: newCart.productId,
         quantity: newCart.quantity,
-        userId: newCart.userId
+        userId: newCart.userId,
+        cartId: newCart.cartId
       })
       .then((res) => {
         console.log(res.data.cart._id)
@@ -115,6 +128,7 @@ export const getCart = (cartId) => {
     return await axios
       .get('http://localhost:3004/cart/' + cartId)
       .then((res) => {
+<<<<<<< HEAD
         console.log(res.data)
         dispatch({
           type: GET_CART,
@@ -127,12 +141,73 @@ export const getCart = (cartId) => {
           payload: "no cart found"
         })
         return error;
+=======
+        dispatch({
+          type: GET_CART,
+          payload: res.data,
+        });
+        return res.data;
+>>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
       })
-  }
-}
+      .catch((error) => {
+        dispatch({
+          type: AUTH_ERROR,
+          payload: 'no cart found',
+        });
+        return error;
+      });
+  };
+};
+
+// export const getCart = (userId) => {
+//   return async (dispatch) => {
+//     return await axios
+//       .post('http://localhost:3004/cart/user/' + userId)
+//       .then((res) => {
+//         console.log(res.data);
+//         dispatch({
+//           type: GET_CART,
+//           payload: res.data,
+//         });
+//         return res.data;
+//       })
+//       .catch((error) => {
+//         dispatch({
+//           type: AUTH_ERROR,
+//           payload: error,
+//         });
+//         return error;
+//       });
+//   };
+// };
+
+// export const performRemoveProduct = (cartId, productId, userId) => {
+//   return async (dispatch) => {
+//     return await axios
+//       .patch('http://localhost:3004/cart/cart/' + cartId + '/' + productId, {
+//         productId: productId,
+//         userId: userId,
+//       })
+//       .then((res) => {
+//         dispatch({
+//           type: REMOVE_PRODUCT,
+//           payload: 'Successfully Removed the product',
+//         });
+//         return res;
+//       })
+//       .catch((error) => {
+//         dispatch({
+//           type: AUTH_ERROR,
+//           payload: 'Oops cannot remove',
+//         });
+//         return error;
+//       });
+//   };
+// };
 
 export const performRemoveProduct = (cartId, productId, userId) => {
   return async (dispatch) => {
+<<<<<<< HEAD
     return await axios.patch('http://localhost:3004/cart/cart/' + cartId + '/' + productId, { productId: productId, userId: userId })
       .then(res => {
         console.log(res.data)
@@ -171,3 +246,41 @@ export const placeOrder = (cartId) => {
       })
   }
 }
+=======
+    return await axios
+      .patch('http://localhost:3004/cart/cart/' + cartId + '/' + productId)
+      .then(async (res) => {
+        dispatch({
+          type: REMOVE_PRODUCT,
+          payload: 'Successfully Removed the product',
+        });
+        return res;
+      })
+      .catch((error) => {
+        dispatch({
+          type: AUTH_ERROR,
+          payload: 'Oops cannot remove',
+        });
+        return error;
+      });
+  };
+};
+
+export const performCheckout = (cartId) => {
+  return async (dispatch) => {
+    return await axios
+      .post('http://localhost:3005/order', {cartId: cartId})
+      .then(async (res) => {
+        console.log(res);
+        return res;
+      })
+      .catch((error) => {
+        dispatch({
+          type: AUTH_ERROR,
+          payload: 'Error with purchase',
+        });
+        return error;
+      });
+  };
+};
+>>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
