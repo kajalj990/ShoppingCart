@@ -38,7 +38,7 @@ router.post('/', (req, res, next) => {
                     _id: mongoose.Types.ObjectId(),
                     productName: req.body.productName,
                     price: req.body.price,
-                    productImage: req.file.path,
+                    productImage: req.body.productImage,
                     quantity: req.body.quantity,
                     category: req.body.category,
                     description: req.body.description
@@ -95,12 +95,8 @@ router.get('/:productId', (req, res, next) => {
 //updating the products
 router.patch('/:productId',(req, res, next) => {
     const id = req.params.productId;
-    const updateOps = {}
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
-    Product.update({ _id: id }, { $set: updateOps }).exec().then(result => {
-        console.log(result);
+    Product.findByIdAndUpdate({ _id: id },req.body).exec().then(result => {
+        console.log(result + "Updated ");
         res.status(200).json({
             message: 'Product update',
             request: {
@@ -126,7 +122,8 @@ router.post('/update', (req, res) => {
     }
     for (let index = 0; index < data.length; index++) {
       const currentProduct = data[index];
-      Product.findById(currentProduct._id)
+      console.log(currentProduct)
+      Product.findById(currentProduct.id)
         .exec()
         .then((databaseObject) => {
             console.log(+databaseObject);

@@ -1,6 +1,6 @@
 .Order {
     margin:25px;
-    width: 550px;
+    width: 800px;
     padding: 16px;
     border: 1px solid #eee;
     box-shadow: 0 2px 3px #ccc;
@@ -8,9 +8,9 @@
     background-color: white;
   }
   .centered{
-    position: fixed;
-    top:25%;
+    top:30%;
     left:30%;
+    margin-left: 130px;
   }
 
   hr {

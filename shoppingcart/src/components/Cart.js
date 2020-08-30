@@ -3,6 +3,7 @@ import UserNavbar from './UserNavbar';
 import * as actionCreator from '../store/actions';
 import { connect } from 'react-redux';
 import Axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export class Cart extends Component {
     constructor(props) {
@@ -88,7 +89,7 @@ export class Cart extends Component {
              <div className='container'>
             <div>{cart}</div>
             <div>
-                <button className="btn btn-success" disabled={!this.state.ishidden} onClick={()=>this.placeOrder()}>Order</button>
+              <Link to="/orders">  <button className="btn btn-success" disabled={!this.state.ishidden}>Check Your Orders</button></Link>
            </div>
            </div>
         )

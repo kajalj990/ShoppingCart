@@ -14,12 +14,8 @@ import CategoryProducts from './components/CategoryProducts';
 import SearchProduct from './components/SearchProduct';
 import ErrorPage from './components/ErrorPage';
 import Cart from './components/Cart';
-<<<<<<< HEAD
-import PaymentPage from './components/PaymentPage';
-import Order from './components/Order';
-=======
 import Orders from './components/Orders'
->>>>>>> 0f62c64041e6f00c5aa30046b5e08a800ac4af28
+import AdminProduct from './components/AdminProduct';
 class App extends Component {
   
   render() {
@@ -34,11 +30,10 @@ class App extends Component {
         <Route path="/error" component={ErrorPage}></Route>
         <Route path="/category/:category" component={CategoryProducts}></Route>
         <Route path="/Cart" component={Cart}></Route>
-        <Route path="/payment" component= {PaymentPage}/>
-        <Route path ="/Order" component ={Order}/>
         <Route path="/login" component={Login }></Route>
         <Route path="/signup" component={Register }></Route>
         <Route path="/orders" component={Orders }></Route>
+        <Route path="/admin/product" component={AdminProduct}></Route>
         <Route
     exact
     path="/"
