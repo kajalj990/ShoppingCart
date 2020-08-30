@@ -44,15 +44,13 @@ router.post('/', async (req, res) => {
     console.log('Stocks Updated');
     // Update Status
     await axios.patch('http://localhost:3004/cart/user/' + req.body.cartId)
-    .then(async updateStatusResponse => {
-      const order = await newOrder.save();
-      res.json(order);
-    })
     .catch(error => {
-      return res.json({ msg: 'Error while updating cart status' });
+      throw Error('Error while updating cart status');
     })
-    console.log('Updated cart status');
 
+    const order = await newOrder.save();
+    console.log('Updated cart status');
+    return res.json({msg: 'Successfully Checked Out'});
     
     
   } catch (error) {
