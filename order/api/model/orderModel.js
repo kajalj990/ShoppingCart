@@ -6,6 +6,10 @@ const orderSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         require:true
     },
+    customerId :{
+        type: mongoose.Schema.Types.ObjectId,
+        require:true
+    },
     orderdDate : {
         type: Date,
         require : true
