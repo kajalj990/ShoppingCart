@@ -9,10 +9,6 @@ import {
   CART,
   GET_CARTID,
   REMOVE_PRODUCT,
-<<<<<<< HEAD
-  ORDER
-=======
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
 } from './actionTypes';
 import axios from 'axios';
 
@@ -128,26 +124,11 @@ export const getCart = (cartId) => {
     return await axios
       .get('http://localhost:3004/cart/' + cartId)
       .then((res) => {
-<<<<<<< HEAD
-        console.log(res.data)
-        dispatch({
-          type: GET_CART,
-          payload: res.data
-        })
-        return res.data;
-      }).catch((error) => {
-        dispatch({
-          type: AUTH_ERROR,
-          payload: "no cart found"
-        })
-        return error;
-=======
         dispatch({
           type: GET_CART,
           payload: res.data,
         });
         return res.data;
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
       })
       .catch((error) => {
         dispatch({
@@ -207,46 +188,6 @@ export const getCart = (cartId) => {
 
 export const performRemoveProduct = (cartId, productId, userId) => {
   return async (dispatch) => {
-<<<<<<< HEAD
-    return await axios.patch('http://localhost:3004/cart/cart/' + cartId + '/' + productId, { productId: productId, userId: userId })
-      .then(res => {
-        console.log(res.data)
-        dispatch({
-          type: REMOVE_PRODUCT,
-          payload: res.data
-        })
-        return res.data
-      }).catch((error) => {
-        dispatch({
-          type: AUTH_ERROR,
-          payload: "Oops cannot remove"
-        })
-        return error;
-      })
-  }
-}
-
-export const placeOrder = (cartId) => {
-  return async (dispatch) => {
-    return await axios
-      .post('http://localhost:3005/order/',{cartId : cartId})
-      .then(res => {
-        console.log(res.data.order)
-        dispatch({
-          type: ORDER,
-          payload: res.data.order
-        })
-        return res
-      }).catch((error) => {
-        dispatch({
-          type: AUTH_ERROR,
-          payload: "Oops Cannot Save the order some error"
-        })
-        return error;
-      })
-  }
-}
-=======
     return await axios
       .patch('http://localhost:3004/cart/cart/' + cartId + '/' + productId)
       .then(async (res) => {
@@ -283,4 +224,3 @@ export const performCheckout = (cartId) => {
       });
   };
 };
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d

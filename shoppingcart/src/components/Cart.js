@@ -3,10 +3,6 @@ import UserNavbar from './UserNavbar';
 import * as actionCreator from '../store/actions';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-<<<<<<< HEAD
-import { Redirect, Link } from 'react-router-dom';
-=======
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
 
 export class Cart extends Component {
     constructor(props) {
@@ -19,14 +15,6 @@ export class Cart extends Component {
         };
     }
 
-<<<<<<< HEAD
-     componentDidUpdate(prevProps) {
-        if (prevProps.cart !== this.props.cart) {
-            // TODO Manipulate cart data
-        }
-    }
-=======
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
 
     async componentDidMount() {
         const cartId = this.props.cartId;
@@ -49,17 +37,6 @@ export class Cart extends Component {
     async deleteProduct(productId){
         console.log(productId)
         await this.props.removeProduct(this.props.cartId,productId,this.props.userId)
-<<<<<<< HEAD
-        if(this.props.cart.TotalPrice){
-           return( <div>No Products Available to order</div>)
-        }
-       
-    }
-    async placeOrder(){
-        console.log(this.props.cartId)
-        await this.props.orderProduct(this.props.cartId)
-//this.props.history.push('/Order')
-=======
         await this.props.fetchCart(this.props.cartId)
         // return(<Redirect to="/Cart"></Redirect>)
     }
@@ -69,7 +46,6 @@ export class Cart extends Component {
         const purchase = await this.props.performCheckout(this.props.cartId);
         console.log(purchase);
         alert('Purchase Successfull')
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
     }
     render() {
         const cart = this.props.cart ? (
@@ -134,13 +110,8 @@ const mapDispatchtoProps = (dispatch) => {
         removeProduct:(cartId,productId,userId)=>{
             return dispatch(actionCreator.performRemoveProduct(cartId,productId,userId))
         },
-<<<<<<< HEAD
-        orderProduct:(cartId)=>{
-            return dispatch(actionCreator.placeOrder(cartId))
-=======
         performCheckout: (cartId) => {
             return dispatch(actionCreator.performCheckout(cartId))
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
         }
     };
 };
