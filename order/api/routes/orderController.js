@@ -65,15 +65,15 @@ router.post('/', async (req, res) => {
  */
 router.get('/history/:userId', async (req, res) => {
   try {
-    const orders = await Order.find({customerId: req.params.userId});
-    console.log(orders);
+    const orders = await Order.find({customerId: req.params.userId}).lean();
+    // console.log(orders);
     const response = await axios.get('http://localhost:3004/cart/user/all/' + req.params.userId);
-    // console.log(response);
-    orders.forEach(order => {
-      cart = response.data.filter(c => c._id === order.cartId.toString());
-      order.cart = cart;
-    })
-    res.send(orders)
+    // Modified order
+    const detailedOrder = orders.map(order => {
+      cart = response.data.filter(c => c._id === order.cartId.toString() && c.status!='PENDING');
+      return {...order, cart: {...cart}};
+    });
+    res.send(detailedOrder)
 
   } catch (error) {
     console.log(error);

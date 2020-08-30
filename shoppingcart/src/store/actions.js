@@ -213,6 +213,15 @@ export const performCheckout = (cartId, userId) => {
       .post('http://localhost:3005/order', {cartId: cartId, userId: userId})
       .then(async (res) => {
         console.log(res);
+        await axios
+          .post('http://localhost:3004/cart/user/' + userId)
+          .then((cartResponse) => {
+            console.log(cartResponse.data);
+            dispatch({
+              type: CART,
+              payload: cartResponse.data._id,
+            });
+          });
         return res;
       })
       .catch((error) => {
