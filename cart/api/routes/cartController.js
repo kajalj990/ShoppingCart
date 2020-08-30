@@ -63,54 +63,6 @@ router.post('/', async (req, res) => {
     productId: req.body.productId,
     quantity: parseInt(req.body.quantity),
   };
-<<<<<<< HEAD
-  console.log(item)
-  Cart.findOne({ customerId: user })
-    .exec()
-    .then((foundCart) => {
-      console.log(foundCart);
-      if (foundCart) {
-        const index = foundCart.items.findIndex(
-          (currentItem) => currentItem.productId == item.productId
-        );
-        if (index == -1) {
-          foundCart.items.push(item);
-        } else {
-          itemToBeUpdated = foundCart.items[index];
-          itemToBeUpdated.quantity += item.quantity;
-        }
-        foundCart.save().then((result) => {
-          console.log(result)
-          res.json({cart: result });
-        });
-
-
-      } else {
-          const newCart = new Cart({
-            _id: mongoose.Types.ObjectId(),
-            items: [
-              {
-                productId: mongoose.mongo.ObjectID(req.body.productId),
-                quantity: req.body.quantity,
-              },
-            ],
-            customerId: mongoose.mongo.ObjectId(user),
-          });
-          newCart
-            .save()
-            .then((result) => {
-              console.log(result);
-              res.json({
-                cart: result,
-              });
-            })
-            .catch((err) => {
-              res.json({ error: err });
-            });
-         }
-        
-      
-=======
   try {
     const foundCart = await Cart.findById(req.body.cartId);
     if (!foundCart) return res.status(404).json({ msg: 'Cart not found' });
@@ -127,7 +79,6 @@ router.post('/', async (req, res) => {
     }
     foundCart.save().then((result) => {
       res.json({ cart: result });
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
     });
   } catch (error) {
     console.log(error);
@@ -135,9 +86,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
-
-=======
 // //to get all  the cart details of all users
 router.get('cart/:userId', (req, res) => {
   console.log();
@@ -154,7 +102,6 @@ router.get('cart/:userId', (req, res) => {
       });
     });
 });
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
 
 //to get the cart with details of product and user
 
@@ -190,18 +137,9 @@ router.get('/:cartId', (req, res) => {
                   productFound.data.product.productName;
                 currentProduct.price = productFound.data.product.price;
                 cart.productList.push(currentProduct);
-<<<<<<< HEAD
-                
-                cart.TotalPrice+=productFound.data.product.price
-              }).catch(err=>{
-                cart.productList.push(null)
-                res.json("no products in the cart")
-              })
-=======
 
                 cart.TotalPrice += productFound.data.product.price;
               });
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
           }
           res.json(cart);
         });
@@ -235,58 +173,6 @@ router.patch('/:cartId', (req, res) => {
 });
 
 //to remove products from the cart
-<<<<<<< HEAD
-router.patch('/cart/:cartId/:productId',(req,res)=>{
-  const item = {
-    productId: req.body.productId,
-   // quantity: req.body.quantity,
-  };
-  
-  Cart.findById({_id:req.params.cartId}).then(foundCart=>{
-    console.log(foundCart)
-    const index = foundCart.items.findIndex(
-     
-      (currentItem) => currentItem.productId == item.productId
-    );
-    console.log(index)
-        foundCart.items[index].remove()
-        console.log('removed')   
-    foundCart.save().then(result =>{
-      axios
-      .get('http://localhost:3001/user/' + result.customerId)
-      .then(async (user) => {
-        var prodlist = { productId: ' ', productName: ' ', price:' ' ,quantity: ' ' };
-        var cart = {
-          customer: { _id: ' ', name: ' ' },
-          productList: [],
-          TotalPrice :0
-        };
-        cart.customer._id = user.data.result._id;
-        cart.customer.name = user.data.result.name;
-        for (let index = 0; index < result.items.length; index++) {
-          let currentProduct = JSON.parse(JSON.stringify(prodlist));
-          currentProduct.productId =result.items[index].productId;
-          currentProduct.quantity = result.items[index].quantity;
-          await axios
-            .get('http://localhost:3002/products/' + currentProduct.productId)
-            .then((productFound) => {
-              currentProduct.productName =
-                productFound.data.product.productName;
-                currentProduct.price =productFound.data.product.price 
-              cart.productList.push(currentProduct);
-              
-              cart.TotalPrice+=productFound.data.product.price
-            }).catch(err=>{
-              cart.productList.push(null)
-              res.json("no products in the cart")
-            })
-        }
-        res.json(cart);
-      })
-  })
-})
-})
-=======
 // router.patch('/cart/:cartId/:productId', (req, res) => {
 //   const item = {
 //     productId: req.body.productId,
@@ -356,7 +242,6 @@ router.post('/user/:userId', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
->>>>>>> 005747b8df99aceadce0e681fccda12c3d4f3c5d
 
 /**
  * @api /cart/user/:userId
