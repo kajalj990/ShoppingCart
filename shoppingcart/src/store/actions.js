@@ -207,10 +207,10 @@ export const performRemoveProduct = (cartId, productId, userId) => {
   };
 };
 
-export const performCheckout = (cartId) => {
+export const performCheckout = (cartId, userId) => {
   return async (dispatch) => {
     return await axios
-      .post('http://localhost:3005/order', {cartId: cartId})
+      .post('http://localhost:3005/order', {cartId: cartId, userId: userId})
       .then(async (res) => {
         console.log(res);
         return res;

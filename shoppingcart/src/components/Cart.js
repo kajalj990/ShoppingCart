@@ -42,9 +42,10 @@ export class Cart extends Component {
 
     handleCheckout = async () => {
         console.log(this.props.cartId);
-        const purchase = await this.props.performCheckout(this.props.cartId);
+        const purchase = await this.props.performCheckout(this.props.cartId, this.props.userId);
         console.log(purchase);
-        alert('Purchase Successfull')
+        this.props.history.push('/orders')
+
     }
     render() {
         const cart = this.props.cart ? (
@@ -102,8 +103,8 @@ const mapDispatchtoProps = (dispatch) => {
         removeProduct:(cartId,productId,userId)=>{
             return dispatch(actionCreator.performRemoveProduct(cartId,productId,userId))
         },
-        performCheckout: (cartId) => {
-            return dispatch(actionCreator.performCheckout(cartId))
+        performCheckout: (cartId, userId) => {
+            return dispatch(actionCreator.performCheckout(cartId, userId))
         }
     };
 };
