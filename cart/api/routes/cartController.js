@@ -239,6 +239,27 @@ router.get('/user/:cartId', async (req, res) => {
 });
 
 /**
+ * @api /cart/user/:cartId
+ * @desc Fetches a cart with given ID
+ */
+router.get('/user/all/:userId', async (req, res) => {
+  try {
+    const carts = await Cart.find({customerId: req.params.userId});
+
+    if (!carts)
+      return res
+        .status(400)
+        .send({ msg: 'Cart doesnt exist' });
+
+    res.send(carts);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error.message);
+  }
+});
+
+/**
  * @api /cart/user/:userId
  * @desc Fetches a cart with status pending
  */

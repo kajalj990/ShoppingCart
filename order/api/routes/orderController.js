@@ -4,55 +4,135 @@ const orderModel = require('../model/orderModel');
 const router = express.Router();
 const Order = require('../model/orderModel');
 const axios = require('axios');
-router.post('/', (req, res) => {
+
+/**
+ * @api /order
+ * @desc Updates stock, updates cart status, generates a new order
+ */
+router.post('/', async (req, res) => {
   const newOrder = new Order({
     _id: mongoose.Types.ObjectId(),
     cartId: mongoose.Types.ObjectId(req.body.cartId),
+    customerId: mongoose.Types.ObjectId(req.body.userId),
     orderdDate: Date.now(),
   });
-  newOrder
-    .save()
-    .then((order) => {
-      axios
-        .get('http://localhost:3004/cart/' + req.body.cartId)
-        .then((currentCart) => {
-          const prodlist = [];
-          if (currentCart.data.productList.length === 0)
-            return res.json({ msg: 'Cart is empty' });
-          currentCart.data.productList.forEach((item) => {
-            currentProduct = {
-              id: item.productId,
-              quantity: +item.quantity,
-            };
-            prodlist.push(currentProduct);
-          });
-          axios
-            .post('http://localhost:3002/products/update', {
-              products: prodlist,
-            })
-            .then((result) => {
-              axios
-                .patch('http://localhost:3004/cart/user/' + req.body.cartId)
-                .then((res) => {
-                  res.json({
-                    result: 'Sucessfully Create a purchase',
-                  });
-                })
-                .catch((error) => res.json(error.message));
-            })
-            .catch((error) => res.json(error.message));
-        })
-        .catch((error) => {
-          console.log(error);
-          res.json(error.message);
-        });
-    })
-    .catch((err) => {
-      res.json({
-        error: err,
-      });
+
+  try {
+    // Fetch Cart
+    const response = await axios.get(
+      'http://localhost:3004/cart/user/' + req.body.cartId
+    );
+    console.log('Fetch Cart');
+
+    if (!response) return res.json({ msg: 'Cart not found' });
+    if (response.data.items.length === 0)
+      return res.json({ msg: 'Cart is empty' });
+    if (response.data.status === 'CHECKOUT') return res.json({ msg: 'Cart already checked out' });
+
+    // Creat a product array
+    const prodlist = [];
+    response.data.items.forEach((item) => {
+      currentProduct = {
+        id: item.productId,
+        quantity: +item.quantity,
+      };
+      prodlist.push(currentProduct);
     });
+
+    // Update Stocks
+    await axios.post('http://localhost:3002/products/update', {products: prodlist})
+    console.log('Stocks Updated');
+    // Update Status
+    await axios.patch('http://localhost:3004/cart/user/' + req.body.cartId)
+    .then(async updateStatusResponse => {
+      const order = await newOrder.save();
+      res.json(order);
+    })
+    .catch(error => {
+      return res.json({ msg: 'Error while updating cart status' });
+    })
+    console.log('Updated cart status');
+
+    
+    
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error.message);
+  }
 });
+
+/**
+ * @api /order/history/:userId
+ * @desc Fecthes all purchases of the user
+ */
+router.get('/history/:userId', async (req, res) => {
+  try {
+    const orders = await Order.find({customerId: req.params.userId});
+    console.log(orders);
+    const response = await axios.get('http://localhost:3004/cart/user/all/' + req.params.userId);
+    // console.log(response);
+    orders.forEach(order => {
+      cart = response.data.filter(c => c._id === order.cartId.toString());
+      order.cart = cart;
+    })
+    res.send(orders)
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Server Error')
+  }
+})
+
+
+// router.post('/', (req, res) => {
+//   const newOrder = new Order({
+//     _id: mongoose.Types.ObjectId(),
+//     cartId: mongoose.Types.ObjectId(req.body.cartId),
+//     orderdDate: Date.now(),
+//   });
+//   newOrder
+//     .save()
+//     .then((order) => {
+//       axios
+//         .get('http://localhost:3004/cart/' + req.body.cartId)
+//         .then((currentCart) => {
+//           const prodlist = [];
+//           if (currentCart.data.productList.length === 0)
+//             return res.json({ msg: 'Cart is empty' });
+//           currentCart.data.productList.forEach((item) => {
+//             currentProduct = {
+//               id: item.productId,
+//               quantity: +item.quantity,
+//             };
+//             prodlist.push(currentProduct);
+//           });
+//           axios
+//             .post('http://localhost:3002/products/update', {
+//               products: prodlist,
+//             })
+//             .then((result) => {
+//               axios
+//                 .patch('http://localhost:3004/cart/user/' + req.body.cartId)
+//                 .then((res) => {
+//                   res.json({
+//                     result: 'Sucessfully Create a purchase',
+//                   });
+//                 })
+//                 .catch((error) => res.json(error.message));
+//             })
+//             .catch((error) => res.json(error.message));
+//         })
+//         .catch((error) => {
+//           console.log(error);
+//           res.json(error.message);
+//         });
+//     })
+//     .catch((err) => {
+//       res.json({
+//         error: err,
+//       });
+//     });
+// });
 
 router.get('/:_id', (req, res) => {
   Order.findById(req.params._id)
