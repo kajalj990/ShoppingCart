@@ -218,6 +218,27 @@ router.patch('/cart/:cartId/:productId', async (req, res) => {
 });
 
 /**
+ * @api /cart/user/:cartId
+ * @desc Fetches a cart with given ID
+ */
+router.get('/user/:cartId', async (req, res) => {
+  try {
+    const cart = await Cart.findById(req.params.cartId);
+
+    if (!cart)
+      return res
+        .status(400)
+        .send({ msg: 'Cart doesnt exist or already checked out' });
+
+    res.send(cart);
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error.message);
+  }
+});
+
+/**
  * @api /cart/user/:userId
  * @desc Fetches a cart with status pending
  */
