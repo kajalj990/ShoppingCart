@@ -76,7 +76,7 @@ export class Navbar extends Component {
               <ul className='nav navbar-nav  my-2 my-lg-0 nav-item'>
                 <li
                   className='nav-link navbar-brand'
-                  onClick={this.props.logout}
+                  onClick={this.props.logout} 
                 >
                   Logout
                 </li>
@@ -97,6 +97,7 @@ export class Navbar extends Component {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.isAuthenticated,
+    userType:state.userType
   };
 };
 

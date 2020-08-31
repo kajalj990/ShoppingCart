@@ -3,14 +3,13 @@ import MaterialTable from "material-table";
 import axios from "axios";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
+import UserNavbar from "./UserNavbar";
 
 const api = axios.create({
   baseURL: `http://localhost:3002/products`,
 });
-
 function AdminProduct() {
-  //   console.log(fetchFlights);
-
+  
   var columns = [
     {
       title: "Product Name",
@@ -103,23 +102,23 @@ function AdminProduct() {
   const handleRowAdd = (newData, resolve) => {
     //validation
     let errorList = [];
-    if (newData.airlines === "") {
-      errorList.push("Please enter airlines company name");
+    if (newData.productName === "") {
+      errorList.push("Please enter productName company name");
     }
-    if (newData.name === "") {
-      errorList.push("Please enter flight name");
+    if (newData.price === "") {
+      errorList.push("Please enter price");
     }
-    if (newData.from === "") {
-      errorList.push("Please enter source");
+    if (newData.productImage === "") {
+      errorList.push("Please enter url for productImage");
     }
-    if (newData.to === "") {
-      errorList.push("Please enter destination");
+    if (newData.quantity === "") {
+      errorList.push("Please enter quantity");
     }
-    if (newData.date === "") {
-      errorList.push("Please enter date");
+    if (newData.category === "") {
+      errorList.push("Please enter category");
     }
-    if (newData.fare === "") {
-      errorList.push("Please enter fare");
+    if (newData.description === "") {
+      errorList.push("Please enter description");
     }
 
     if (errorList.length < 1) {
@@ -165,9 +164,9 @@ function AdminProduct() {
   };
 
   return (
-    <div className="App">
+    <div className="">
       <Grid container spacing={1}>
-        <Grid item xs={1}></Grid>
+        <Grid item xs={1} style={{width:"100%"}}></Grid>
         <Grid item xs={0}>
           <div>
             {iserror && (
@@ -179,7 +178,7 @@ function AdminProduct() {
             )}
           </div>
           <MaterialTable
-            title="Manage flights"
+            title="Manage Products"
             columns={columns}
             data={data}
             // icons={tableIcons}

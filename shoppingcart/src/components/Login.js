@@ -11,7 +11,8 @@ class Login extends Component {
       errors: '',
       emailError: '',
       passwordError: '',
-      submitted: false
+      submitted: false,
+      userType:''
     };
 
     this.onChange = this.onChange.bind(this);
@@ -50,10 +51,12 @@ class Login extends Component {
 
     if (this.handleErrors(e)) {
       await this.props.login(user);
-      if (!this.props.errorMessage) this.props.history.push('/home');
-        
-       // else this.props.history.push('/admin/product'); 
-      
+      console.log(this.props.userType)
+      if (!this.props.errorMessage) {
+        if(this.props.userType =='Admin')this.props.history.push('/admin')
+        else this.props.history.push('/home')
+      }
+      // else this.props.history.push('/admin/product'); 
       else {this.setState({ errors: this.props.errorMessage });}
     }
   }
@@ -120,6 +123,7 @@ class Login extends Component {
 const mapStateToProps = (state) => {
   return {
     errorMessage: state.errorMessage,
+    userType:state.userType
   };
 };
 

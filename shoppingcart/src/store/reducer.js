@@ -32,6 +32,7 @@ const authReducer = (state = defaultState, action) => {
       return { ...state, errorMessage: action.payload };
     case AUTH_LOGIN:
       console.log('Logged in');
+      console.log(action.payload.userType)
       return {
         ...state,
         isAuthenticated: true,

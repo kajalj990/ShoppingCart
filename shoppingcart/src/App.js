@@ -19,16 +19,18 @@ import AdminProduct from './components/AdminProduct';
 import { ListProduct } from './components/ListProduct';
 import PaymentPage from './components/PaymentPage';
 import PayDetails from './components/PayDetails';
+import { connect } from 'react-redux';
 class App extends Component {
   
   render() {
     return (
       <Router>
         <div className="App">
+          
          <Navbar/>
          <Route path="/product/:id" component={Product}/>
          <Route path="/search" component={SearchProduct}/>
-         <Route path="/user"  component={UserNavbar}></Route>
+         <Route path="/admin"  component={UserNavbar}></Route>
         <Route path="/home" component={Home}></Route>
         <Route path="/error" component={ErrorPage}></Route>
         <Route path="/category/:category" component={CategoryProducts}></Route>
@@ -54,6 +56,10 @@ class App extends Component {
     )
   }
 }
-
-export default App
+const mapsStateToProps=(state)=>{
+  return{
+    userType:state.userType
+  }
+}
+export default connect(mapsStateToProps) (App)
 

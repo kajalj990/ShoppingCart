@@ -71,6 +71,7 @@ export const performLogin = (data) => {
             userId: res.data.userId,
             userType: res.data.userType,
           },
+          
         });
         await axios
           .post('http://localhost:3004/cart/user/' + res.data.userId)

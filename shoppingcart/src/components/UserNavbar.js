@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
+import AdminProduct from './AdminProduct'
+import './admin.css'
 export class UserNavbar extends Component {
     render() {
         return (
             <div className="font">
-         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+         <nav className="navbar navbar-expand-lg navbar-dark bg-dark nav1">
             <a className="navbar-brand nav-link" href="/home">Shoppy</a>
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
               <ul className="navbar-nav mr-auto">
@@ -21,12 +23,17 @@ export class UserNavbar extends Component {
               </ul>
             <ul className="nav navbar-nav  my-2 my-lg-0 nav-item">
             <li className="nav-item">
-                  <a className="nav-link navbar-brand" href="/Cart">Cart</a>
+                  <a className="nav-link navbar-brand" href="/Cart">Logout</a>
                 </li>
-              <li>Welcome</li>
+                <li className="nav-item">
+                  <a className="nav-link navbar-brand" href="/admin">Manage Product</a>
+                </li>
             </ul>
             </div>
           </nav>
+          <div className="container1">
+          <AdminProduct/>
+          </div>
 </div>
     )
   }
