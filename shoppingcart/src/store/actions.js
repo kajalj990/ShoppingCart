@@ -17,6 +17,12 @@ export const performLogout = () => {
     type: AUTH_LOGOUT,
   };
 };
+export const clearErrorMsg = () => {
+  return {
+    type: AUTH_ERROR,
+    payload: '',
+  };
+};
 
 export const performRegister = (newUser) => {
   return async (dispatch) => {
@@ -51,17 +57,19 @@ export const showError = (data) => {
   };
 };
 
+
 export const performLogin = (data) => {
   return async (dispatch) => {
     return await axios
       .post('http://localhost:3001/user/login', data)
       .then(async (res) => {
+        console.log(res.data.userType)
         dispatch({
           type: AUTH_LOGIN,
           payload: {
             token: res.data.token,
             userId: res.data.userId,
-            userType: res.data.admin,
+            userType: res.data.userType,
           },
         });
         await axios

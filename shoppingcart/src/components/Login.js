@@ -51,7 +51,10 @@ class Login extends Component {
     if (this.handleErrors(e)) {
       await this.props.login(user);
       if (!this.props.errorMessage) this.props.history.push('/home');
-      else this.setState({ errors: this.props.errorMessage });
+        
+       // else this.props.history.push('/admin/product'); 
+      
+      else {this.setState({ errors: this.props.errorMessage });}
     }
   }
 

@@ -79,6 +79,7 @@ function AdminProduct() {
       api
         .patch("/" + newData._id, newData)
         .then((res) => {
+          
           const dataUpdate = [...data];
           const index = oldData.tableData._id;
           dataUpdate[index] = newData;

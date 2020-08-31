@@ -25,27 +25,30 @@ class Orders extends Component {
       this.props.history.push('/login')
     }
   }
+   
+  handleClick(cartId){
+    
+    this.props.history.push('/listproducts/'+cartId)
+  }
 
   render() {
     return (
     <div className="container">
-      
+                {console.log(this.state.orders)}
               {this.state.orders.map( item=>{
                 return(
                   <div className="centered">
                   <div className="Order">
-                    <h4>Order Date:{item.orderdDate}</h4>
-                  <p>{item.cartId}</p>
+                <p>Order Id :{item._id}</p><br/>
+                <p>Order Date:{item.orderdDate}</p>
+                <hr/>
+                <p>Total Price transaction:<span className="price">{item.cart[0].total}Rs</span></p>
+                <p><button onClick={()=>this.handleClick(item.cartId)}>View Details</button></p>
+                {/* <p>{this}</p> */}
                   </div><br/>
                   </div>
                 )               
               })}
-                {/* // 
-                // <p> <span className="price">5Rs</span></p>
-                // <p> product 1 <span className="price">8Rs</span></p>
-                // <p> product 1 <span className="price">2Rs</span></p>
-                // <hr/>
-                // <p>Total <span className="price" style={{color:"black"}}><b>30Rs</b></span></p> */}
     </div>);
   }
 }

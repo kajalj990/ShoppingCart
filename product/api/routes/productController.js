@@ -93,9 +93,9 @@ router.get('/:productId', (req, res, next) => {
 })
 
 //updating the products
-router.patch('/:productId',(req, res, next) => {
+router.patch('/:productId',(req, res) => {
     const id = req.params.productId;
-    Product.findByIdAndUpdate({ _id: id },req.body).exec().then(result => {
+    Product.findByIdAndUpdate(id ,req.body).exec().then(result => {
         console.log(result + "Updated ");
         res.status(200).json({
             message: 'Product update',
@@ -183,12 +183,7 @@ router.get('/category/:category', (req, res, next) => {
 router.get('/product/:prodName', (req, res, next) => {
     const prodName=req.params.prodName
     var regex =RegExp(".*"+prodName+".*");
-    Product.find({ productName : regex})
-        .select('productName price _id productImage quantity description')
-        .exec()
-        .then(product => {
-            console.log("from database", product);
-            if (product) {
+    Product.find({$text:{$search:regex}},function(err,product){
                 res.status(200).json({
                     product: product,
                     request: {
@@ -198,7 +193,7 @@ router.get('/product/:prodName', (req, res, next) => {
                 }
                 );
             }
-        }).catch(err => {
+            ).catch(err => {
             console.log(err)
             res.status(500).json({ error: err })
         });

@@ -11,6 +11,12 @@ class PaymentPage extends Component{
             payment : e.target.value,
             submitDisabled:false
         });
+
+        if(this.state.payment == 'pod'){
+            this.props.history.push('/orders')
+        }else{
+            this.props.history.push('/payDetails')
+        }
        
       }
 

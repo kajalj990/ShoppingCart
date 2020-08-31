@@ -24,13 +24,8 @@ export class Cart extends Component {
             this.setState({ cart: cart ,ishidden:true});
         } else {
             if (!this.props.userId) {
-                alert('Not Logged In Login please');
                 this.props.history.push('/login');
-            } else {
-
-                // TODO - REMOVE alerts everywhere
-                // TODO - This alert doesnt make sense
-                alert('Add items in cart');
+            } else{
                 this.props.history.push('/home');
             }
         }
@@ -47,7 +42,6 @@ export class Cart extends Component {
         const purchase = await this.props.performCheckout(this.props.cartId, this.props.userId);
         console.log(purchase);
         this.props.history.push('/orders')
-
     }
     render() {
         const cart = this.props.cart ? (
@@ -89,7 +83,8 @@ export class Cart extends Component {
              <div className='container'>
             <div>{cart}</div>
             <div>
-              <Link to="/orders">  <button className="btn btn-success" disabled={!this.state.ishidden}>Check Your Orders</button></Link>
+              <Link to="/orders">  <button className="btn btn-success" disabled={!this.state.ishidden}>
+                  Check Your Orders</button></Link>
            </div>
            </div>
         )

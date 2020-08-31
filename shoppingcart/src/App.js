@@ -16,6 +16,9 @@ import ErrorPage from './components/ErrorPage';
 import Cart from './components/Cart';
 import Orders from './components/Orders'
 import AdminProduct from './components/AdminProduct';
+import { ListProduct } from './components/ListProduct';
+import PaymentPage from './components/PaymentPage';
+import PayDetails from './components/PayDetails';
 class App extends Component {
   
   render() {
@@ -33,6 +36,9 @@ class App extends Component {
         <Route path="/login" component={Login }></Route>
         <Route path="/signup" component={Register }></Route>
         <Route path="/orders" component={Orders }></Route>
+        <Route path ="/pay" component={PaymentPage}></Route>
+        <Route path ="/payDetails" component={PayDetails}></Route>
+        <Route path="/listproducts/:cartId" component={ListProduct}></Route>
         <Route path="/admin/product" component={AdminProduct}></Route>
         <Route
     exact
