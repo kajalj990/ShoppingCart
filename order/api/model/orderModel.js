@@ -13,8 +13,7 @@ const orderSchema = mongoose.Schema({
     orderdDate : {
         type: Date,
         require : true
-    },
-
+    }
 })
 
 module.exports = mongoose.model('Orders',orderSchema)
