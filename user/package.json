@@ -4,7 +4,10 @@
   "description": "User microservice",
   "main": "user.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "test"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "author": "kajal jaiswal",
   "license": "ISC",
@@ -15,5 +18,6 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.0"
-  }
+  },
+  "devDependencies": {}
 }

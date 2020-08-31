@@ -68,6 +68,7 @@ router.post('/', async (req, res) => {
     if (!foundCart) return res.status(404).json({ msg: 'Cart not found' });
     if (foundCart.status === 'CHECKEDOUT')
       return res.status(404).json({ msg: 'Cart already checked out' });
+      
     const index = foundCart.items
       .map((currentItem) => currentItem.productId)
       .indexOf(item.productId);
@@ -77,6 +78,7 @@ router.post('/', async (req, res) => {
       itemToBeUpdated = foundCart.items[index];
       itemToBeUpdated.quantity += item.quantity;
     }
+    
     foundCart.save().then((result) => {
       res.json({ cart: result });
     });
@@ -138,12 +140,21 @@ router.get('/:cartId', (req, res) => {
                 currentProduct.price = productFound.data.product.price;
                 cart.productList.push(currentProduct);
 
-                cart.TotalPrice += productFound.data.product.price;
+                cart.TotalPrice = (cart.TotalPrice + productFound.data.product.price)*foundCart.items[index].quantity ;
+                price = cart.TotalPrice
+                console.log(price)
+                Cart.findById(req.params.cartId).then(updateCart=>{
+                  updateCart.total = price
+                  updateCart.save()
+                })
               });
-          }
+              }
           res.json(cart);
         });
+        //console.log(foundCart.total)
+        
     });
+    
 });
 
 router.delete('/:cartId', (req, res) => {
@@ -225,7 +236,6 @@ router.patch('/cart/:cartId/:productId', async (req, res) => {
 router.get('/user/:cartId', async (req, res) => {
   try {
     const cart = await Cart.findById(req.params.cartId);
-
     if (!cart)
       return res
         .status(400)
@@ -241,12 +251,11 @@ router.get('/user/:cartId', async (req, res) => {
 
 /**
  * @api /cart/user/:cartId
- * @desc Fetches a cart with given ID
+ * @desc Fetches  all cart with given userId 
  */
 router.get('/user/all/:userId', async (req, res) => {
   try {
     const carts = await Cart.find({customerId: req.params.userId});
-
     if (!carts)
       return res
         .status(400)
