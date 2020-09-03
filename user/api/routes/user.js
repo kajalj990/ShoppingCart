@@ -5,9 +5,9 @@ const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken')
 
-//Creating a new user
+//Creating a new user*********************
 router.post("/signup", (req, res, next) => {
-  //Checks if email aleardy exists
+  //Checks if email aleardy exists**************************
     User.find({ emailId: req.body.emailId }) 
       .exec()
       .then(user => {
@@ -17,7 +17,7 @@ router.post("/signup", (req, res, next) => {
             message: "Mail exists"
           });
         } else {
-          //bcrypt used to secure the password
+          //bcrypt used to secure the password*********************
           bcrypt.hash(req.body.password, 10, (err, hash) => {
             if (err) {
                 return res.status(500).json({
@@ -58,7 +58,6 @@ router.get('/AllUser',(req, res, next) => {
     User.find().select('name gender address phoneNo emailId password userType')
         .exec().then(result => {
             res.status(200).json({
-                count: result.length,
                 users: result.map(doc => {
                     return {
                         _id: doc.id,
@@ -74,7 +73,7 @@ router.get('/AllUser',(req, res, next) => {
             })
         }).catch(err=>{
             console.log(err)
-            res.status(500).json({
+            res.status(404).json({
                 message:"data not found",
                 error:err
             })
@@ -82,7 +81,7 @@ router.get('/AllUser',(req, res, next) => {
 })
 
 
-//to login 
+//to login *****************************
 router.post("/login", (req, res, next) => {
   console.log(req.body.emailId)
   User.find({ emailId: req.body.emailId })
@@ -135,7 +134,7 @@ router.post("/login", (req, res, next) => {
 });
 
 
-//to delete the user
+//to delete the user by Id ******************
 router.delete("/:userId", (req, res, next) => {
   User.remove({ _id: req.params.userId })
     .exec()
@@ -152,17 +151,18 @@ router.delete("/:userId", (req, res, next) => {
     });
 });
 
+
+/**Getting user by its id */
 router.get('/:customerId',(req, res, next) => {
-  User.findOne({ _id : req.params.customerId}).select('name gender address phoneNo emailId password userType')
+  User.findById({ _id : req.params.customerId}).select('name gender address phoneNo emailId password userType')
       .exec().then(result => {
-          res.status(200).json({
-              count: result.length,
+        if(!result) res.status(404).json({message :"no user with the id exists"})
+         else res.status(200).json({
               result: result
-             
-          })
+          })  
       }).catch(err=>{
           console.log(err)
-          res.status(500).json({
+          res.status(400).json({
               message:"data not found",
               error:err
           })

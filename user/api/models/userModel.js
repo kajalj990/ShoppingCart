@@ -6,34 +6,34 @@ const userSchema = mongoose.Schema({
 
     name: {
         type: String,
-        require: true,
+        required: true,
     },
     gender: {
         type: String,
-        require: true,
+        required: true,
     },
     phoneNo: {
         type: Number,
-        require: true,
+        required: true,
 
     },
     address: {
         type: String,
-        require: true
+        required: true
     },
     emailId: {
         type: String,
         unique: true,
-        require: true,
+        required: true,
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
     password: {
         type: String,
-        require: true,
+        required: true,
     },
     userType: {
         type: String,
-        default: 'Customer'
+        default: 'customer'
     }
 })
 

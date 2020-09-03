@@ -4,60 +4,6 @@ const Cart = require('../model/cartModel');
 const mongoose = require('mongoose');
 const axios = require('axios');
 
-// router.post('/', (req, res) => {
-//   console.log(req.body);
-//   console.log('Called me post from cart');
-//   // const id =  req.body.productId
-//   const user = req.body.userId;
-//   console.log(user);
-//   const item = {
-//     productId: req.body.productId,
-//     quantity: parseInt(req.body.quantity),
-//   };
-//   console.log(item);
-//   Cart.findOne({ customerId: user })
-//     .exec()
-//     .then((foundCart) => {
-//       if (foundCart) {
-//         const index = foundCart.items.findIndex(
-//           (currentItem) => currentItem.productId == item.productId
-//         );
-//         if (index == -1) {
-//           foundCart.items.push(item);
-//         } else {
-//           itemToBeUpdated = foundCart.items[index];
-//           itemToBeUpdated.quantity += item.quantity;
-//         }
-//         foundCart.save().then((result) => {
-//           console.log(result);
-//           res.json({ cart: result });
-//         });
-//       } else {
-//         const newCart = new Cart({
-//           _id: mongoose.Types.ObjectId(),
-//           items: [
-//             {
-//               productId: mongoose.mongo.ObjectID(req.body.productId),
-//               quantity: req.body.quantity,
-//             },
-//           ],
-//           customerId: mongoose.mongo.ObjectId(user),
-//         });
-//         newCart
-//           .save()
-//           .then((result) => {
-//             console.log(result);
-//             res.json({
-//               cart: result,
-//             });
-//           })
-//           .catch((err) => {
-//             res.json({ error: err });
-//           });
-//       }
-//     });
-// });
-
 router.post('/', async (req, res) => {
   const item = {
     productId: req.body.productId,
@@ -164,6 +110,7 @@ router.delete('/:cartId', (req, res) => {
       res.send("cart deleted")
     });
 });
+
 //on hold
 // to update the qunatity of product added to cart
 router.patch('/:cartId', (req, res) => {
@@ -183,26 +130,6 @@ router.patch('/:cartId', (req, res) => {
   });
 });
 
-//to remove products from the cart
-// router.patch('/cart/:cartId/:productId', (req, res) => {
-//   const item = {
-//     productId: req.body.productId,
-//     // quantity: req.body.quantity,
-//   };
-
-//   Cart.findByIdAndDelete({ _id: req.params.cartId }).then((foundCart) => {
-//     console.log(foundCart);
-//     const index = foundCart.items.findIndex(
-//       (currentItem) => currentItem.productId == item.productId
-//     );
-//     console.log(index);
-//     foundCart.items[index].remove();
-//     console.log('removed');
-//     foundCart.save().then((result) => {
-//       res.json({ result: result });
-//     });
-//   });
-// });
 
 router.patch('/cart/:cartId/:productId', async (req, res) => {
   const productToBeDeleted = req.params.productId;
@@ -230,8 +157,8 @@ router.patch('/cart/:cartId/:productId', async (req, res) => {
 });
 
 /**
- * @api /cart/user/:cartId
- * @desc Fetches a cart with given ID
+ * 
+ * Fetches a cart with given ID
  */
 router.get('/user/:cartId', async (req, res) => {
   try {
@@ -250,8 +177,8 @@ router.get('/user/:cartId', async (req, res) => {
 });
 
 /**
- * @api /cart/user/:cartId
- * @desc Fetches  all cart with given userId 
+ * 
+ *  Fetches  all cart with given userId 
  */
 router.get('/user/all/:userId', async (req, res) => {
   try {
@@ -270,8 +197,8 @@ router.get('/user/all/:userId', async (req, res) => {
 });
 
 /**
- * @api /cart/user/:userId
- * @desc Fetches a cart with status pending
+ *  
+ *  Fetches a cart with status pending
  */
 router.post('/user/:userId', async (req, res) => {
   try {
@@ -295,8 +222,8 @@ router.post('/user/:userId', async (req, res) => {
 });
 
 /**
- * @api /cart/user/:userId
- * @desc Update cart status
+ * 
+ *  Update cart status
  */
 router.patch('/user/:cartId', async (req, res) => {
   try {

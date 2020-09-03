@@ -5,27 +5,27 @@ const productSchema = mongoose.Schema({
     _id:mongoose.Schema.Types.ObjectId,
     productName : {
         type:String,
-        require:true
+        required:true
     },
     price :{
         type:Number,
-        require:true
+        required:true
     },
     productImage :{
         type:String,
-        require:true
+        required:true
     },
     quantity:{
         type:Number,
-        require: true
+        required: true
     },
     category:{
         type:String,
-        require:true
+        required:true
     },
     description:{
         type:String,
-        require:true
+        required:true
     }
 })
 

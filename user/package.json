@@ -4,10 +4,7 @@
   "description": "User microservice",
   "main": "user.js",
   "scripts": {
-    "test": "test"
-  },
-  "jest": {
-    "testEnvironment": "node"
+    "test": "mocha --timeout 1000000"
   },
   "author": "kajal jaiswal",
   "license": "ISC",
@@ -19,5 +16,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "mocha": "^8.1.3",
+    "should": "^13.2.3"
+  }
 }
